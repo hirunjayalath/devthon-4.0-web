@@ -7,27 +7,31 @@ export function LoadingScreen({ isLeaving }: { isLeaving: boolean }) {
       aria-label="Loading DEV{thon} 4.0"
     >
       <div className="loading-grid" aria-hidden="true" />
-      <div className="loading-scan" aria-hidden="true" />
+      <div className="loading-stage">
+        <div className="loading-wireframe" aria-hidden="true">
+          <span className="loading-wire loading-wire--top" />
+          <span className="loading-wire loading-wire--side" />
+          <span className="loading-wire loading-wire--line-a" />
+          <span className="loading-wire loading-wire--line-b" />
+          <span className="loading-wire loading-wire--panel-a" />
+          <span className="loading-wire loading-wire--panel-b" />
+        </div>
+        <div className="loading-sweep" aria-hidden="true" />
 
-      <div className="loading-shell">
-        <p className="loading-kicker">Web development competition</p>
         <div className="loading-wordmark" aria-hidden="true">
           <span>DEV</span>
           <span className="loading-accent">{'{thon}'}</span>
           <span className="loading-version">4.0</span>
-          <span className="loading-cursor" />
         </div>
 
         <div className="loading-progress" aria-hidden="true">
           <span />
         </div>
 
-        <div className="loading-phases" aria-hidden="true">
-          <span>Design</span>
-          <span>Build</span>
-          <span>Launch</span>
-        </div>
-        <p className="loading-status">Preparing the experience</p>
+        <span className="loading-corner loading-corner--tl" aria-hidden="true" />
+        <span className="loading-corner loading-corner--tr" aria-hidden="true" />
+        <span className="loading-corner loading-corner--bl" aria-hidden="true" />
+        <span className="loading-corner loading-corner--br" aria-hidden="true" />
       </div>
     </div>
   )
