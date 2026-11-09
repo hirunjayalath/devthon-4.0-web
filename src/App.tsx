@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { EventTimeline, PrizePool } from './EventSections'
 import { HeroSection } from './HeroSection'
+import { LoadingScreen } from './LoadingScreen'
 import { RegistrationPage } from './RegistrationPage'
 import { AboutSection, CategoryOverview, ContactSection, Footer, OrganizersSection } from './StaticSections'
 
@@ -48,6 +49,24 @@ function HomePage({ onRegister }: { onRegister: () => void }) {
 
 function App() {
   const [isRegistration, setIsRegistration] = useState(window.location.hash === '#register')
+  const [loadingStage, setLoadingStage] = useState<'active' | 'leaving' | 'done'>('active')
+
+  useEffect(() => {
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const leaveTimer = window.setTimeout(() => setLoadingStage('leaving'), reduceMotion ? 180 : 1350)
+    const doneTimer = window.setTimeout(() => setLoadingStage('done'), reduceMotion ? 260 : 1780)
+
+    return () => {
+      window.clearTimeout(leaveTimer)
+      window.clearTimeout(doneTimer)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (loadingStage === 'done') return
+    document.body.classList.add('is-loading')
+    return () => document.body.classList.remove('is-loading')
+  }, [loadingStage])
 
   useEffect(() => {
     const onHashChange = () => setIsRegistration(window.location.hash === '#register')
@@ -78,7 +97,14 @@ function App() {
     setIsRegistration(false)
   }
 
-  return isRegistration ? <RegistrationPage onBack={goHome} /> : <HomePage onRegister={goToRegistration} />
+  const page = isRegistration ? <RegistrationPage onBack={goHome} /> : <HomePage onRegister={goToRegistration} />
+
+  return (
+    <>
+      {loadingStage !== 'done' && <LoadingScreen isLeaving={loadingStage === 'leaving'} />}
+      {page}
+    </>
+  )
 }
 
 export default App

@@ -3,6 +3,168 @@
 html { scroll-behavior: smooth; }
 body { margin: 0; min-width: 320px; background: #111014; color: #ffffff; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
 button, a { -webkit-tap-highlight-color: transparent; }
+body.is-loading { overflow: hidden; }
+
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #0d0c0f;
+  opacity: 1;
+  transition: opacity 430ms cubic-bezier(0.22, 1, 0.36, 1), visibility 430ms;
+}
+
+.loading-screen--leaving {
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.loading-grid {
+  position: absolute;
+  inset: -48px;
+  background-image:
+    linear-gradient(rgba(249, 115, 22, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(249, 115, 22, 0.07) 1px, transparent 1px);
+  background-position: center;
+  background-size: 48px 48px;
+  mask-image: radial-gradient(circle, #000 0%, transparent 68%);
+  animation: loading-grid-drift 4.8s linear infinite;
+}
+
+.loading-scan {
+  position: absolute;
+  top: 0;
+  left: 8%;
+  width: 84%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(249, 115, 22, 0.9), transparent);
+  opacity: 0;
+  animation: loading-scan 1.35s ease-in-out forwards;
+}
+
+.loading-shell {
+  position: relative;
+  width: min(620px, calc(100% - 48px));
+  padding: 48px 0 42px;
+  border-block: 1px solid rgba(251, 146, 60, 0.18);
+  text-align: center;
+}
+
+.loading-kicker,
+.loading-status,
+.loading-phases {
+  text-transform: uppercase;
+  letter-spacing: 0.24em;
+}
+
+.loading-kicker {
+  margin: 0 0 22px;
+  color: #fb923c;
+  font-size: 0.7rem;
+  font-weight: 800;
+  animation: loading-copy-in 500ms 80ms both;
+}
+
+.loading-wordmark {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.08em;
+  color: #fff;
+  font-size: clamp(2rem, 9vw, 6.5rem);
+  font-weight: 950;
+  letter-spacing: -0.075em;
+  line-height: 0.9;
+  animation: loading-brand-in 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.loading-accent,
+.loading-version { color: #f97316; }
+.loading-version { margin-left: 0.08em; font-size: 0.42em; letter-spacing: -0.03em; }
+
+.loading-cursor {
+  width: 0.04em;
+  height: 0.72em;
+  margin-left: 0.1em;
+  background: #f97316;
+  animation: loading-cursor 440ms step-end infinite;
+}
+
+.loading-progress {
+  height: 2px;
+  margin: 36px auto 22px;
+  overflow: hidden;
+  background: rgba(251, 146, 60, 0.14);
+}
+
+.loading-progress span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: #f97316;
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: loading-progress 1.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.loading-phases {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  color: rgba(255, 237, 213, 0.48);
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+
+.loading-phases span { animation: loading-phase 900ms both; }
+.loading-phases span:nth-child(2) { animation-delay: 250ms; }
+.loading-phases span:nth-child(3) { animation-delay: 520ms; }
+
+.loading-status {
+  margin: 24px 0 0;
+  color: rgba(255, 237, 213, 0.4);
+  font-size: 0.58rem;
+  font-weight: 700;
+  animation: loading-copy-in 500ms 300ms both;
+}
+
+@keyframes loading-grid-drift {
+  to { transform: translate3d(48px, 48px, 0); }
+}
+
+@keyframes loading-scan {
+  0% { top: 8%; opacity: 0; }
+  15%, 82% { opacity: 0.75; }
+  100% { top: 92%; opacity: 0; }
+}
+
+@keyframes loading-brand-in {
+  from { opacity: 0; transform: translateY(24px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes loading-copy-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes loading-progress {
+  0% { transform: scaleX(0); }
+  65% { transform: scaleX(0.72); }
+  100% { transform: scaleX(1); }
+}
+
+@keyframes loading-phase {
+  0%, 100% { color: rgba(255, 237, 213, 0.42); }
+  45% { color: #fb923c; }
+}
+
+@keyframes loading-cursor {
+  50% { opacity: 0; }
+}
 
 .studio-grid {
   background-image:
@@ -88,6 +250,15 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .loading-grid,
+  .loading-scan,
+  .loading-kicker,
+  .loading-wordmark,
+  .loading-cursor,
+  .loading-progress span,
+  .loading-phases span,
+  .loading-status { animation: none !important; }
+  .loading-progress span { transform: scaleX(1); }
   .studio-note,
   .studio-title-line,
   .studio-action,
