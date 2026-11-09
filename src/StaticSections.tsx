@@ -1,3 +1,6 @@
+import leoSltcLogo from './assets/organizers/leo-sltc.jpeg'
+import leoUomLogo from './assets/organizers/leo-uom.png'
+
 function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
   return (
     <div className="mb-10 max-w-2xl">
@@ -59,21 +62,51 @@ export function CategoryOverview() {
 
 export function OrganizersSection() {
   const organizers = [
-    ['Lead organizer', 'Leo Club', 'University of Moratuwa'],
-    ['Co-organizer', 'Leo Club', 'Sri Lanka Technological Campus'],
+    {
+      role: 'Lead organizer',
+      name: 'Leo Club',
+      institution: 'University of Moratuwa',
+      description: 'Leading the charge in youth empowerment and technological innovation through service and leadership.',
+      focus: 'Service / Leadership / Innovation',
+      logo: leoUomLogo,
+      logoAlt: 'Leo Club of University of Moratuwa logo',
+      logoScale: 1.06,
+    },
+    {
+      role: 'Co-organizer',
+      name: 'Leo Club',
+      institution: 'Sri Lanka Technology Campus',
+      description: 'Building future leaders through technology and service with a vision for sustainable development.',
+      focus: 'Technology / Innovation / Leadership',
+      logo: leoSltcLogo,
+      logoAlt: 'Leo Club of Sri Lanka Technology Campus logo',
+      logoScale: 1.18,
+    },
   ]
 
   return (
     <section id="organizers" className="reveal-on-scroll bg-[#171419] px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
-        <SectionTitle eyebrow="Our journey" title="Built by people who care about the next generation." text="DEV{thon} 4.0 is organized through a collaboration focused on youth service, leadership and practical technology education." />
+        <SectionTitle eyebrow="Organizers" title="Built by people who care about the next generation." text="A collaboration of visionary organizations committed to fostering innovation, leadership and community service." />
         <div className="grid gap-5 md:grid-cols-2">
-          {organizers.map(([role, name, institution]) => (
-            <article key={institution} className="rounded-3xl border border-orange-300/10 bg-[#111014] p-7">
-              <div className="h-px w-16 bg-orange-500/40" />
-              <p className="mt-7 text-xs font-bold uppercase tracking-[0.2em] text-orange-400">{role}</p>
-              <h3 className="mt-2 text-2xl font-black">{name}</h3>
-              <p className="mt-1 text-orange-100/55">{institution}</p>
+          {organizers.map((organizer) => (
+            <article key={organizer.institution} className="grid gap-7 rounded-3xl border border-orange-300/10 bg-[#111014] p-7 sm:grid-cols-[8rem_1fr] sm:items-center">
+              <div className="mx-auto h-32 w-32 overflow-hidden rounded-full">
+                <img
+                  className="h-full w-full object-cover"
+                  style={{ transform: `scale(${organizer.logoScale})` }}
+                  src={organizer.logo}
+                  alt={organizer.logoAlt}
+                />
+              </div>
+              <div>
+                <div className="h-px w-16 bg-orange-500/40" />
+                <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-orange-400">{organizer.role}</p>
+                <h3 className="mt-2 text-2xl font-black">{organizer.name}</h3>
+                <p className="mt-1 text-orange-100/70">{organizer.institution}</p>
+                <p className="mt-4 leading-7 text-orange-100/55">{organizer.description}</p>
+                <p className="mt-5 border-t border-orange-300/10 pt-4 text-xs font-bold uppercase tracking-[0.14em] text-orange-300/70">{organizer.focus}</p>
+              </div>
             </article>
           ))}
         </div>
@@ -153,9 +186,17 @@ export function Footer() {
         </div>
         <div className="border-y border-orange-300/15 py-7 text-center">
           <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-400">Organized By</h2>
-          <ul className="mt-4 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-orange-100/70">
-            <li>Leo Club of University of Moratuwa</li>
-            <li>Leo Club of Sri Lanka Technological Campus</li>
+          <ul aria-label="Organizing clubs" className="mt-6 flex items-center justify-center gap-10 sm:gap-16">
+            <li>
+              <div className="h-20 w-20 overflow-hidden rounded-full">
+                <img className="h-full w-full scale-[1.06] object-cover" src={leoUomLogo} alt="Leo Club of University of Moratuwa logo" />
+              </div>
+            </li>
+            <li>
+              <div className="h-20 w-20 overflow-hidden rounded-full">
+                <img className="h-full w-full scale-[1.18] object-cover" src={leoSltcLogo} alt="Leo Club of Sri Lanka Technology Campus logo" />
+              </div>
+            </li>
           </ul>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-6 text-sm text-orange-100/60">
