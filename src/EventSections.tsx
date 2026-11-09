@@ -49,24 +49,24 @@ const prizeByCategory = {
     total: 'LKR 70,000',
     additional: 'Plus additional prizes and recognition worth LKR 30,000',
     placements: [
-      { title: 'Champion', amount: 'LKR 20,000', note: 'First place winner with outstanding innovation' },
-      { title: '1st Runner Up', amount: 'LKR 15,000', note: 'Second place with exceptional execution' },
-      { title: '2nd Runner Up', amount: 'LKR 10,000', note: 'Third place with remarkable creativity' },
+      { title: 'Champion', amount: 'LKR 20,000' },
+      { title: '1st Runner Up', amount: 'LKR 15,000' },
+      { title: '2nd Runner Up', amount: 'LKR 10,000' },
     ],
   },
   University: {
     total: 'LKR 150,000',
     additional: 'Plus additional prizes and recognition worth LKR 70,000',
     placements: [
-      { title: 'Champion', amount: 'LKR 50,000', note: 'First place winner with outstanding innovation' },
-      { title: '1st Runner Up', amount: 'LKR 30,000', note: 'Second place with exceptional execution' },
-      { title: '2nd Runner Up', amount: 'LKR 20,000', note: 'Third place with remarkable creativity' },
+      { title: 'Champion', amount: 'LKR 50,000' },
+      { title: '1st Runner Up', amount: 'LKR 30,000' },
+      { title: '2nd Runner Up', amount: 'LKR 20,000' },
     ],
   },
 } satisfies Record<Category, {
   total: string
   additional: string
-  placements: { title: string; amount: string; note: string }[]
+  placements: { title: string; amount: string }[]
 }>
 
 function CategoryTabs({ active, onChange }: { active: Category; onChange: (category: Category) => void }) {
@@ -168,7 +168,6 @@ export function PrizePool() {
               <div className="mx-auto h-px w-12 bg-orange-500/60" />
               <h3 className="mt-5 text-xl font-black">{placement.title}</h3>
               <p className="mt-3 text-3xl font-black text-orange-400">{placement.amount}</p>
-              <p className="mx-auto mt-4 max-w-xs text-sm leading-6 text-orange-100/55">{placement.note}</p>
             </article>
           ))}
         </div>
