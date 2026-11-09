@@ -64,8 +64,7 @@ export function OrganizersSection() {
   const organizers = [
     {
       role: 'Lead organizer',
-      name: 'Leo Club',
-      institution: 'University of Moratuwa',
+      name: 'Leo Club of University of Moratuwa',
       description: 'Leading the charge in youth empowerment and technological innovation through service and leadership.',
       focus: 'Service / Leadership / Innovation',
       logo: leoUomLogo,
@@ -74,8 +73,7 @@ export function OrganizersSection() {
     },
     {
       role: 'Co-organizer',
-      name: 'Leo Club',
-      institution: 'Sri Lanka Technology Campus',
+      name: 'Leo Club of Sri Lanka Technology Campus',
       description: 'Building future leaders through technology and service with a vision for sustainable development.',
       focus: 'Technology / Innovation / Leadership',
       logo: leoSltcLogo,
@@ -90,8 +88,8 @@ export function OrganizersSection() {
         <SectionTitle eyebrow="Organizers" title="Built by people who care about the next generation." text="A collaboration of visionary organizations committed to fostering innovation, leadership and community service." />
         <div className="grid gap-5 md:grid-cols-2">
           {organizers.map((organizer) => (
-            <article key={organizer.institution} className="grid gap-7 rounded-3xl border border-orange-300/10 bg-[#111014] p-7 sm:grid-cols-[8rem_1fr] sm:items-center">
-              <div className="mx-auto h-32 w-32 overflow-hidden rounded-full">
+            <article key={organizer.name} className="grid gap-7 rounded-3xl border border-orange-300/10 bg-[#111014] p-7 sm:grid-cols-[6rem_1fr] sm:items-center">
+              <div className="mx-auto h-24 w-24 overflow-hidden rounded-full">
                 <img
                   className="h-full w-full object-cover"
                   style={{ transform: `scale(${organizer.logoScale})` }}
@@ -103,7 +101,6 @@ export function OrganizersSection() {
                 <div className="h-px w-16 bg-orange-500/40" />
                 <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-orange-400">{organizer.role}</p>
                 <h3 className="mt-2 text-2xl font-black">{organizer.name}</h3>
-                <p className="mt-1 text-orange-100/70">{organizer.institution}</p>
                 <p className="mt-4 leading-7 text-orange-100/55">{organizer.description}</p>
                 <p className="mt-5 border-t border-orange-300/10 pt-4 text-xs font-bold uppercase tracking-[0.14em] text-orange-300/70">{organizer.focus}</p>
               </div>
@@ -186,14 +183,14 @@ export function Footer() {
         </div>
         <div className="border-y border-orange-300/15 py-7 text-center">
           <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-orange-400">Organized By</h2>
-          <ul aria-label="Organizing clubs" className="mt-6 flex items-center justify-center gap-10 sm:gap-16">
+          <ul aria-label="Organizing clubs" className="mt-6 flex items-center justify-center gap-8 sm:gap-12">
             <li>
-              <div className="h-20 w-20 overflow-hidden rounded-full">
+              <div className="h-16 w-16 overflow-hidden rounded-full">
                 <img className="h-full w-full scale-[1.06] object-cover" src={leoUomLogo} alt="Leo Club of University of Moratuwa logo" />
               </div>
             </li>
             <li>
-              <div className="h-20 w-20 overflow-hidden rounded-full">
+              <div className="h-16 w-16 overflow-hidden rounded-full">
                 <img className="h-full w-full scale-[1.18] object-cover" src={leoSltcLogo} alt="Leo Club of Sri Lanka Technology Campus logo" />
               </div>
             </li>
