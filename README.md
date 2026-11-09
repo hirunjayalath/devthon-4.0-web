@@ -1,32 +1,50 @@
-# React + TypeScript + Vite
+# DEV{thon} 4.0
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Frontend for **DEV{thon} 4.0**, a web development competition for school and university students organized by the Leo Club of the University of Moratuwa.
 
-Currently, two official plugins are available:
+## Highlights
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Responsive, mobile-friendly event landing page
+- Custom dark and orange visual system
+- Interactive web-lab hero experience
+- Separate school and university timelines
+- Prize-pool, event information, organizer, and contact sections
+- Registration page prepared for the competition workflow
+- Scroll-reveal motion with reduced-motion support
 
-## React Compiler
+## Tech stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Oxlint
 
-## Expanding the Oxlint configuration
+## Run locally
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+```bash
+npm install
+npm run dev
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Open the local URL shown by Vite, normally `http://localhost:5173`.
+
+## Quality checks
+
+```bash
+npm run lint
+npm run build
+```
+
+## Project status
+
+The frontend foundation is complete. Competition dates, organizer logos, and the production registration backend can be updated as the final event information becomes available.
+
+## Contact
+
+- Email: hirunjayalath24@gmail.com
+- Phone: 076 915 5963
+
+## Contributor
+
+Developed and maintained by [Hirun Jayalath](https://github.com/hirunjayalath).
