@@ -47,7 +47,6 @@ const timelineByCategory: Record<Category, TimelineItem[]> = {
 const prizeByCategory = {
   School: {
     total: 'LKR 70,000',
-    additional: 'Plus additional prizes and recognition worth LKR 30,000',
     placements: [
       { title: 'Champion', amount: 'LKR 20,000' },
       { title: '1st Runner Up', amount: 'LKR 15,000' },
@@ -56,7 +55,6 @@ const prizeByCategory = {
   },
   University: {
     total: 'LKR 150,000',
-    additional: 'Plus additional prizes and recognition worth LKR 70,000',
     placements: [
       { title: 'Champion', amount: 'LKR 50,000' },
       { title: '1st Runner Up', amount: 'LKR 30,000' },
@@ -65,7 +63,6 @@ const prizeByCategory = {
   },
 } satisfies Record<Category, {
   total: string
-  additional: string
   placements: { title: string; amount: string }[]
 }>
 
@@ -175,7 +172,6 @@ export function PrizePool() {
         <div className="mt-6 rounded-3xl border border-orange-400/25 bg-orange-500/10 p-7 text-center">
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-300">Total Prize Pool</p>
           <p className="mt-2 text-4xl font-black md:text-5xl">{prize.total}</p>
-          <p className="mt-3 text-sm text-orange-100/60">{prize.additional}</p>
         </div>
       </div>
     </section>
