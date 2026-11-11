@@ -68,14 +68,14 @@ const prizeByCategory = {
 
 function CategoryTabs({ active, onChange }: { active: Category; onChange: (category: Category) => void }) {
   return (
-    <div className="mb-10 inline-flex rounded-xl border border-orange-300/15 bg-[#111014] p-1.5">
+    <div className="mb-10 inline-flex border border-orange-300/15 bg-[#111014] p-1.5">
       {(['School', 'University'] as Category[]).map((category) => (
         <button
           key={category}
           type="button"
           aria-pressed={active === category}
           onClick={() => onChange(category)}
-          className={`rounded-lg px-5 py-2.5 text-sm font-bold transition sm:px-7 ${
+          className={`px-5 py-2.5 text-sm font-bold transition sm:px-7 ${
             active === category
               ? 'bg-orange-600 text-white'
               : 'text-orange-100/55 hover:text-white'
@@ -114,7 +114,7 @@ export function EventTimeline() {
               >
                 <div className="relative z-10 col-start-1 row-start-1 mt-3 h-4 w-4 rounded-full border-4 border-[#171419] bg-orange-500 md:col-start-2 md:mx-auto" />
                 <article
-                  className={`group col-start-2 row-start-1 rounded-3xl border border-orange-300/10 bg-[#111014] p-6 transition hover:-translate-y-1 hover:border-orange-500/40 ${
+                  className={`group col-start-2 row-start-1 border border-orange-300/10 bg-[#111014] p-6 transition hover:-translate-y-1 hover:border-orange-500/40 ${
                     isLeft ? 'md:col-start-1' : 'md:col-start-3'
                   }`}
                 >
@@ -125,7 +125,7 @@ export function EventTimeline() {
                   <h3 className="text-2xl font-black">{item.stage}</h3>
                   <p className="mt-3 text-sm font-bold text-orange-200">{item.date}</p>
                   {item.related?.map((detail) => (
-                    <p key={detail} className="mt-4 rounded-xl border border-orange-300/10 bg-orange-500/5 px-4 py-3 text-xs leading-5 text-orange-100/55">{detail}</p>
+                    <p key={detail} className="mt-4 border border-orange-300/10 bg-orange-500/5 px-4 py-3 text-xs leading-5 text-orange-100/55">{detail}</p>
                   ))}
                 </article>
               </div>
@@ -156,7 +156,7 @@ export function PrizePool() {
           {prize.placements.map((placement, index) => (
             <article
               key={placement.title}
-              className={`relative overflow-hidden rounded-3xl border p-7 text-center ${
+              className={`relative overflow-hidden border p-7 text-center ${
                 index === 0
                   ? 'border-orange-400/40 bg-gradient-to-b from-orange-500/20 to-[#171419]'
                   : 'border-orange-300/10 bg-[#171419]'
@@ -169,7 +169,7 @@ export function PrizePool() {
           ))}
         </div>
 
-        <div className="mt-6 rounded-3xl border border-orange-400/25 bg-orange-500/10 p-7 text-center">
+        <div className="mt-6 border border-orange-400/25 bg-orange-500/10 p-7 text-center">
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-300">Total Prize Pool</p>
           <p className="mt-2 text-4xl font-black md:text-5xl">{prize.total}</p>
         </div>

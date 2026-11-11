@@ -3,5 +3,6 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
+  base: process.env.GITHUB_ACTIONS ? '/devthon-4.0-web/' : '/',
   plugins: [react(), tailwindcss()],
 })

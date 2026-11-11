@@ -2,6 +2,10 @@
 
 Frontend for **DEV{thon} 4.0**, a web development competition for school and university students organized by the Leo Club of the University of Moratuwa.
 
+## Live website
+
+[Open DEV{thon} 4.0](https://hirunjayalath.github.io/devthon-4.0-web/)
+
 ## Highlights
 
 - Responsive, mobile-friendly event landing page

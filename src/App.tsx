@@ -21,9 +21,9 @@ function Navigation({ onRegister }: { onRegister: () => void }) {
           <a className="transition hover:text-white" href="#timeline">Timeline</a>
           <a className="transition hover:text-white" href="#prizes">Prizes</a>
           <a className="transition hover:text-white" href="#organizers">Organizers</a>
-          <button onClick={onRegister} className="rounded-xl bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
+          <button onClick={onRegister} className="bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
         </div>
-        <button onClick={onRegister} className="rounded-lg bg-orange-600 px-4 py-2 text-sm font-bold md:hidden">Register</button>
+        <button onClick={onRegister} className="bg-orange-600 px-4 py-2 text-sm font-bold md:hidden">Register</button>
       </div>
     </nav>
   )

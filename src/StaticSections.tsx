@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import hirunJayalath from './assets/contacts/hirun-jayalath.png'
+import hirunaKarunarathna from './assets/contacts/hiruna-karunarathna.png'
+import pasanAmarakoon from './assets/contacts/pasan-amarakoon.png'
 import leoSltcLogo from './assets/organizers/leo-sltc.jpeg'
 import leoUomLogo from './assets/organizers/leo-uom.png'
 
@@ -24,7 +28,7 @@ export function AboutSection() {
         <SectionTitle eyebrow="About the event" title="Learning through development" text="Turn an idea into a proposal, refine the user experience and demonstrate a working solution with guidance from mentors and facilitators." />
         <div className="grid gap-5 md:grid-cols-3">
           {cards.map(([title, copy]) => (
-            <article key={title} className="rounded-3xl border border-orange-300/10 bg-[#111014] p-7 transition hover:-translate-y-1 hover:border-orange-500/40">
+            <article key={title} className="border border-orange-300/10 bg-[#111014] p-7 transition hover:-translate-y-1 hover:border-orange-500/40">
               <div className="h-px w-14 bg-orange-500/60" />
               <h3 className="mt-7 text-xl font-bold">{title}</h3>
               <p className="mt-3 leading-7 text-orange-100/55">{copy}</p>
@@ -48,7 +52,7 @@ export function CategoryOverview() {
         <SectionTitle eyebrow="Choose your track" title="Two categories. One shared ambition." text="The final eligibility rules, team sizes and submission requirements will be added once confirmed by the organizing committee." />
         <div className="grid gap-6 md:grid-cols-2">
           {categories.map(([title, copy]) => (
-            <article key={title} className="rounded-3xl border border-orange-300/15 bg-gradient-to-br from-orange-500/15 to-transparent p-8">
+            <article key={title} className="border border-orange-300/15 bg-gradient-to-br from-orange-500/15 to-transparent p-8">
               <div className="h-px w-20 bg-gradient-to-r from-orange-500/70 to-transparent" />
               <h3 className="mt-16 text-3xl font-black">{title}</h3>
               <p className="mt-4 max-w-lg leading-7 text-orange-100/60">{copy}</p>
@@ -88,7 +92,7 @@ export function OrganizersSection() {
         <SectionTitle eyebrow="Organizers" title="Built by people who care about the next generation." text="A collaboration of visionary organizations committed to fostering innovation, leadership and community service." />
         <div className="grid gap-5 md:grid-cols-2">
           {organizers.map((organizer) => (
-            <article key={organizer.name} className="grid gap-7 rounded-3xl border border-orange-300/10 bg-[#111014] p-7 sm:grid-cols-[6rem_1fr] sm:items-center">
+            <article key={organizer.name} className="grid gap-7 border border-orange-300/10 bg-[#111014] p-7 sm:grid-cols-[6rem_1fr] sm:items-center">
               <div className="mx-auto h-24 w-24 overflow-hidden rounded-full">
                 <img
                   className="h-full w-full object-cover"
@@ -122,15 +126,102 @@ function ContactLinks() {
 }
 
 export function ContactSection({ onRegister }: { onRegister: () => void }) {
+  const [activeContact, setActiveContact] = useState<number | null>(null)
+  const contacts = [
+    {
+      name: 'Leo Hiruna Karunarathna',
+      position: 'President',
+      club: 'Leo Club of University of Moratuwa',
+      phone: '071 486 8960',
+      phoneHref: '+94714868960',
+      email: 'karunarathnahiruna2002@gmail.com',
+      photo: hirunaKarunarathna,
+      photoPosition: 'center top',
+    },
+    {
+      name: 'Leo Pasan Amarakoon',
+      position: 'Vice President',
+      club: 'Leo Club of University of Moratuwa',
+      phone: '070 324 2440',
+      phoneHref: '+94703242440',
+      email: 'amarakoonpasan1@gmail.com',
+      photo: pasanAmarakoon,
+      photoPosition: 'center 18%',
+      photoTransform: 'translateX(-18%) scale(1.4)',
+    },
+    {
+      name: 'Leo Hirun Jayalath',
+      position: 'Director of Web & PR',
+      club: 'Leo Club of University of Moratuwa',
+      phone: '076 915 5953',
+      phoneHref: '+94769155953',
+      email: 'hirunjayalath24@gmail.com',
+      photo: hirunJayalath,
+      photoPosition: 'center 26%',
+    },
+  ]
   return (
-    <section id="contact" className="reveal-on-scroll scroll-mt-16 px-6 py-24 md:px-12">
-      <div className="mx-auto flex max-w-7xl flex-col justify-between gap-8 rounded-3xl border border-orange-300/15 bg-gradient-to-r from-orange-600/20 to-transparent p-8 md:flex-row md:items-center md:p-12">
-        <div>
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Have questions?</p>
-          <h2 className="mt-3 text-3xl font-black">Let’s build the future together.</h2>
-          <div className="mt-4 text-orange-100/75"><ContactLinks /></div>
+    <section id="contact" className="scroll-mt-16 px-6 py-24 md:px-12">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 max-w-2xl">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Contact us</p>
+          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Organizing team</h2>
+          <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
-        <button onClick={onRegister} className="shrink-0 rounded-xl bg-orange-600 px-7 py-3.5 font-bold transition hover:bg-orange-500">Start registration</button>
+
+        <div>
+          <div className="flex flex-col border-t border-orange-300/15 lg:h-[34rem] lg:flex-row">
+            {contacts.map((contact, index) => (
+              <article
+                key={contact.name}
+                role="button"
+                tabIndex={0}
+                onMouseEnter={() => setActiveContact(index)}
+                onMouseLeave={() => setActiveContact(null)}
+                onFocus={() => setActiveContact(index)}
+                onBlur={(event) => {
+                  if (!event.currentTarget.contains(event.relatedTarget)) setActiveContact(null)
+                }}
+                onClick={() => setActiveContact(index)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault()
+                    setActiveContact(index)
+                  }
+                }}
+                aria-label={`Show contact details for ${contact.name}`}
+                className="group relative h-[28rem] cursor-pointer overflow-hidden border-b border-orange-300/15 outline-none last:border-b-0 focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-full lg:flex-1 lg:border-b-0 lg:border-r lg:last:border-r-0"
+              >
+                <img
+                  src={contact.photo}
+                  alt={contact.name}
+                  className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: contact.photoPosition, transform: contact.photoTransform }}
+                />
+
+                <div className={`absolute left-0 top-0 h-0.5 bg-orange-500 transition-[width] duration-300 ${activeContact === index ? 'w-full' : 'w-0'}`} />
+
+                <div className="absolute inset-x-0 bottom-0 bg-[#111014]/95 p-6">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400">{contact.position}</p>
+                  <h3 className="mt-2 text-xl font-black md:text-2xl">{contact.name}</h3>
+                  <div className={`grid transition-[grid-template-rows,opacity] duration-300 ${activeContact === index ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
+                    <div className="overflow-hidden">
+                      <p className="leading-6 text-orange-100/60">{contact.club}</p>
+                      <address className="mt-4 grid gap-2 not-italic">
+                        <a className="w-fit font-bold text-white transition-colors hover:text-orange-400" href={`tel:${contact.phoneHref}`}>{contact.phone}</a>
+                        <a className="w-fit max-w-full break-all text-sm text-orange-100/65 transition-colors hover:text-orange-400" href={`mailto:${contact.email}`}>{contact.email}</a>
+                      </address>
+                    </div>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-12 text-center">
+          <button onClick={onRegister} className="border border-orange-500 bg-orange-600 px-7 py-3.5 font-bold transition hover:bg-orange-500">Start registration</button>
+        </div>
       </div>
     </section>
   )
