@@ -18,8 +18,8 @@ const imageHeight = 1024
 
 const dragonPieces: DragonPiece[] = [
   // Far wing, near wing, then the four lower legs.
-  { sourceX: 0, sourceY: 0, width: 476, height: 320, pivotX: 461, pivotY: 164, amplitude: 0.032, speed: 3.4, phase: 0.5 },
-  { sourceX: 860, sourceY: 41, width: 676, height: 399, pivotX: 876, pivotY: 287, amplitude: -0.035, speed: 3.4, phase: 0 },
+  { sourceX: 0, sourceY: 0, width: 476, height: 350, pivotX: 461, pivotY: 164, amplitude: 0.026, speed: 3.4, phase: 0.5 },
+  { sourceX: 860, sourceY: 41, width: 676, height: 399, pivotX: 876, pivotY: 287, amplitude: -0.028, speed: 3.4, phase: 0 },
   { sourceX: 69, sourceY: 666, width: 223, height: 256, pivotX: 261, pivotY: 707, amplitude: 0.028, speed: 1.85, phase: 0.2 },
   { sourceX: 307, sourceY: 773, width: 300, height: 225, pivotX: 522, pivotY: 788, amplitude: -0.026, speed: 1.75, phase: 1.1 },
   { sourceX: 630, sourceY: 676, width: 222, height: 246, pivotX: 753, pivotY: 707, amplitude: 0.025, speed: 1.82, phase: 2.1 },
@@ -92,8 +92,8 @@ function prepareDragonImage(image: HTMLImageElement) {
       pieceContext.lineTo(330, 190)
       pieceContext.lineTo(270, 185)
       pieceContext.lineTo(190, 210)
-      pieceContext.lineTo(20, 310)
-      pieceContext.lineTo(0, 320)
+      pieceContext.lineTo(20, 340)
+      pieceContext.lineTo(0, 350)
       pieceContext.closePath()
       pieceContext.fillStyle = '#fff'
       pieceContext.fill()
@@ -114,8 +114,8 @@ function prepareDragonImage(image: HTMLImageElement) {
       bodyContext.lineTo(325, 175)
       bodyContext.lineTo(265, 170)
       bodyContext.lineTo(185, 195)
-      bodyContext.lineTo(20, 310)
-      bodyContext.lineTo(0, 320)
+      bodyContext.lineTo(20, 340)
+      bodyContext.lineTo(0, 350)
       bodyContext.closePath()
       bodyContext.clip()
       bodyContext.clearRect(0, 0, piece.width, piece.height)
@@ -124,7 +124,7 @@ function prepareDragonImage(image: HTMLImageElement) {
     }
     if (index === 1) {
       // This wing reaches the image's outer edge; retain overlap only along its inner joint.
-      bodyContext.clearRect(piece.sourceX + 26, piece.sourceY, piece.width - 26, piece.height - 26)
+      bodyContext.clearRect(piece.sourceX + 26, piece.sourceY, piece.width - 26, piece.height)
       return
     }
     bodyContext.clearRect(piece.sourceX, piece.sourceY, piece.width, piece.height)
@@ -210,9 +210,8 @@ export function DragonScene() {
       if (!bodyCanvas || pieceCanvases.length !== dragonPieces.length) return
 
       const { scale, offsetX, offsetY } = getPlacement()
-      dragonContext.drawImage(bodyCanvas, offsetX, offsetY, imageWidth * scale, imageHeight * scale)
-
-      dragonPieces.forEach((piece, index) => {
+      const drawPiece = (index: number) => {
+        const piece = dragonPieces[index]
         const angle = reducedMotion ? 0 : Math.sin(elapsed * piece.speed + piece.phase) * piece.amplitude
         const pivotDisplayX = offsetX + piece.pivotX * scale
         const pivotDisplayY = offsetY + piece.pivotY * scale
@@ -228,7 +227,13 @@ export function DragonScene() {
           piece.height * scale,
         )
         dragonContext.restore()
-      })
+      }
+
+      // Wings sit behind the static body, so their mechanical joints stay covered while flapping.
+      drawPiece(0)
+      drawPiece(1)
+      dragonContext.drawImage(bodyCanvas, offsetX, offsetY, imageWidth * scale, imageHeight * scale)
+      for (let index = 2; index < dragonPieces.length; index += 1) drawPiece(index)
     }
 
     const drawFire = (time: number) => {
