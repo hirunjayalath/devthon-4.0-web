@@ -21,7 +21,7 @@ const imageWidth = 1536
 const imageHeight = 1024
 const headSource = { x: 580, y: 70, width: 300, height: 350 }
 const headPivot = { x: 748, y: 390 }
-const headTarget = { x: 455, y: 570 }
+const headTarget = { x: 455, y: 604 }
 const mouthPoint = { x: 610, y: 235 }
 
 const dragonPieces: DragonPiece[] = [
@@ -100,6 +100,19 @@ function tracePolygon(context: CanvasRenderingContext2D, points: Point[], offset
   context.closePath()
 }
 
+function removeSpriteGlow(context: CanvasRenderingContext2D) {
+  const imageData = context.getImageData(0, 0, imageWidth, imageHeight)
+  const { data } = imageData
+  // The generated sprite already has alpha, but its very faint backdrop creates a
+  // large grey/orange aura on the dark hero. Remove only that low-alpha backdrop
+  // and remap the solid artwork back to a clean, naturally anti-aliased cutout.
+  for (let offset = 3; offset < data.length; offset += 4) {
+    const alpha = data[offset]
+    data[offset] = alpha <= 104 ? 0 : Math.min(255, Math.round((alpha - 104) * 1.72))
+  }
+  context.putImageData(imageData, 0, 0)
+}
+
 function prepareDragonImage(image: HTMLImageElement) {
   const sourceCanvas = document.createElement('canvas')
   sourceCanvas.width = imageWidth
@@ -107,6 +120,7 @@ function prepareDragonImage(image: HTMLImageElement) {
   const sourceContext = sourceCanvas.getContext('2d')
   if (!sourceContext) return null
   sourceContext.drawImage(image, 0, 0, imageWidth, imageHeight)
+  removeSpriteGlow(sourceContext)
 
   const bodyCanvas = document.createElement('canvas')
   bodyCanvas.width = imageWidth
@@ -339,7 +353,7 @@ export function DragonScene() {
       if (dx < -28) {
         const rawAngle = Math.atan2(dy, dx)
         const forwardOffset = Math.atan2(Math.sin(rawAngle - Math.PI), Math.cos(rawAngle - Math.PI))
-        targetAngle = Math.max(-0.15, Math.min(0.15, forwardOffset * 0.42))
+        targetAngle = Math.max(-0.085, Math.min(0.085, forwardOffset * 0.3))
       }
       headAngle += (targetAngle - headAngle) * 0.1
     }
