@@ -9,13 +9,17 @@ import devthon2FirstRunnersUp from './assets/gallery/devthon-2-first-runners-up.
 import devthon2Judging from './assets/gallery/devthon-2-judging.jpeg'
 import devthon2SecondRunnersUp from './assets/gallery/devthon-2-second-runners-up.jpeg'
 import devthon2Stage from './assets/gallery/devthon-2-stage.jpeg'
-import devthon3Audience from './assets/gallery/devthon-3-audience.jpeg'
-import devthon3Judging from './assets/gallery/devthon-3-judging.jpeg'
-import devthon3Participants from './assets/gallery/devthon-3-participants.jpeg'
-import devthon3Presentation from './assets/gallery/devthon-3-presentation.jpeg'
-import devthon3Registration from './assets/gallery/devthon-3-registration.jpeg'
-import devthon3StageScreen from './assets/gallery/devthon-3-stage-screen.jpeg'
+import devthon3BestAiTeam from './assets/gallery/devthon-3-best-ai-team.jpeg'
+import devthon3SchoolChampions from './assets/gallery/devthon-3-school-champions.jpeg'
+import devthon3SchoolFirstRunnersUpA from './assets/gallery/devthon-3-school-first-runners-up-a.jpeg'
+import devthon3SchoolFirstRunnersUpB from './assets/gallery/devthon-3-school-first-runners-up-b.jpeg'
+import devthon3SchoolSecondRunnersUp from './assets/gallery/devthon-3-school-second-runners-up.jpeg'
 import devthon3Stage from './assets/gallery/devthon-3-stage.jpeg'
+import devthon3UniversityAwardees from './assets/gallery/devthon-3-university-awardees.jpeg'
+import devthon3UniversityAwards from './assets/gallery/devthon-3-university-awards.jpeg'
+import devthon3UniversityChampions from './assets/gallery/devthon-3-university-champions.jpeg'
+import devthon3UniversityFirstRunnersUp from './assets/gallery/devthon-3-university-first-runners-up.jpeg'
+import devthon3UniversitySecondRunnersUp from './assets/gallery/devthon-3-university-second-runners-up.jpeg'
 
 type GalleryImage = {
   src: string
@@ -52,13 +56,17 @@ const editions: Edition[] = [
   {
     name: '3.0',
     images: [
-      { src: devthon3Stage, alt: 'DEVthon 3.0 organizing team with the stage decoration', caption: 'The DEVthon 3.0 stage' },
-      { src: devthon3Presentation, alt: 'A team presenting its work to the DEVthon 3.0 judges', caption: 'Final presentation' },
-      { src: devthon3Audience, alt: 'School participants at the DEVthon 3.0 final day', caption: 'Final-day audience' },
-      { src: devthon3Registration, alt: 'A participant completing registration at DEVthon 3.0', caption: 'Registration' },
-      { src: devthon3Judging, alt: 'DEVthon 3.0 judges watching a presentation', caption: 'Judging session' },
-      { src: devthon3StageScreen, alt: 'The DEVthon 3.0 stage screen before the final', caption: 'Final-day stage' },
-      { src: devthon3Participants, alt: 'University participants at DEVthon 3.0', caption: 'Participants' },
+      { src: devthon3Stage, alt: 'DEVthon 3.0 participants, organizers and winners gathered at the decorated event stage', caption: 'The DEVthon 3.0 stage' },
+      { src: devthon3BestAiTeam, alt: 'DEVthon 3.0 university category best AI team', caption: 'University best AI team' },
+      { src: devthon3SchoolSecondRunnersUp, alt: 'DEVthon 3.0 school category second runners-up', caption: 'School second runners-up' },
+      { src: devthon3UniversityAwards, alt: 'DEVthon 3.0 university category award winners', caption: 'University award winners' },
+      { src: devthon3UniversityAwardees, alt: 'DEVthon 3.0 university category teams with their awards', caption: 'University awardees' },
+      { src: devthon3SchoolChampions, alt: 'DEVthon 3.0 school category champions', caption: 'School champions' },
+      { src: devthon3SchoolFirstRunnersUpA, alt: 'DEVthon 3.0 school category first runners-up', caption: 'School first runners-up' },
+      { src: devthon3SchoolFirstRunnersUpB, alt: 'A DEVthon 3.0 school category first runners-up team', caption: 'School first runners-up team' },
+      { src: devthon3UniversitySecondRunnersUp, alt: 'DEVthon 3.0 university category second runners-up', caption: 'University second runners-up' },
+      { src: devthon3UniversityChampions, alt: 'DEVthon 3.0 university category champions', caption: 'University champions' },
+      { src: devthon3UniversityFirstRunnersUp, alt: 'DEVthon 3.0 university category first runners-up', caption: 'University first runners-up' },
     ],
   },
 ]
@@ -93,6 +101,7 @@ export function GallerySection() {
         <div className="space-y-20">
           {editions.map((edition) => {
             const [featured, ...moments] = edition.images
+            const hasManyPhotos = moments.length > 6
 
             return (
               <article key={edition.name} className="border-t border-orange-400/35 pt-6">
@@ -102,17 +111,17 @@ export function GallerySection() {
                   </h3>
                 </header>
 
-                <div className="grid gap-2 lg:grid-cols-[1.35fr_1fr]">
+                <div className={`grid gap-2 ${hasManyPhotos ? '' : 'lg:grid-cols-[1.35fr_1fr]'}`}>
                   <button
                     type="button"
                     onClick={() => setSelectedImage(featured)}
-                    className="group relative min-h-[20rem] overflow-hidden border border-orange-300/15 bg-[#111014] text-left focus-visible:outline-2 focus-visible:outline-orange-500 lg:min-h-full"
+                    className={`group relative overflow-hidden border border-orange-300/15 bg-[#111014] text-left focus-visible:outline-2 focus-visible:outline-orange-500 ${hasManyPhotos ? 'aspect-[16/9] md:aspect-[16/7]' : 'min-h-[20rem] lg:min-h-full'}`}
                     aria-label={`Open ${featured.caption}`}
                   >
                     <img className="absolute inset-0 h-full w-full object-cover" src={featured.src} alt={featured.alt} loading="lazy" />
                   </button>
 
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className={`grid grid-cols-2 gap-2 ${hasManyPhotos ? 'md:grid-cols-3 lg:grid-cols-5' : ''}`}>
                     {moments.map((image) => (
                       <button
                         key={image.src}
