@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import dragonTextureUrl from './assets/dragon/devthon-dragon-sprites-v3.png'
+import dragonTextureUrl from './assets/dragon/devthon-dragon-sprites-v4.png'
 
 type DragonPiece = {
   sourceX: number
@@ -496,7 +496,7 @@ export function DragonScene() {
   return (
     <div
       ref={hostRef}
-      className="relative min-h-[360px] w-full overflow-visible sm:min-h-[440px] lg:min-h-[620px]"
+      className="relative min-h-[360px] w-full overflow-visible sm:min-h-[440px] lg:-ml-12 lg:min-h-[620px] lg:w-[calc(100%+6rem)]"
       aria-label="Mechanical DEVthon dragon with animated wings and fire breath"
       role="img"
     >
