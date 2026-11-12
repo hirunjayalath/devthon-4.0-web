@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import dragonTextureUrl from './assets/dragon/devthon-dragon-sprites-v2.png'
+import dragonTextureUrl from './assets/dragon/devthon-dragon-sprites-v3.png'
 
 type DragonPiece = {
   sourceX: number
@@ -19,22 +19,22 @@ type Point = { x: number; y: number }
 
 const imageWidth = 1536
 const imageHeight = 1024
-const headSource = { x: 560, y: 15, width: 330, height: 420 }
-const headPivot = { x: 755, y: 390 }
-const headTarget = { x: 450, y: 550 }
-const mouthPoint = { x: 582, y: 215 }
+const headSource = { x: 580, y: 70, width: 300, height: 350 }
+const headPivot = { x: 748, y: 390 }
+const headTarget = { x: 455, y: 570 }
+const mouthPoint = { x: 610, y: 235 }
 
 const dragonPieces: DragonPiece[] = [
   // The sprite sheet contains two complete, separate wings. Each rotates around its
   // connector and lands on the matching shoulder socket on the wingless body.
   {
     sourceX: 25, sourceY: 10, width: 550, height: 420,
-    pivotX: 528, pivotY: 395, targetX: 548, targetY: 555,
+    pivotX: 536, pivotY: 395, targetX: 557, targetY: 555,
     amplitude: 0.055, speed: 3.6, phase: 0.15,
   },
   {
     sourceX: 880, sourceY: 10, width: 656, height: 455,
-    pivotX: 907, pivotY: 420, targetX: 693, targetY: 560,
+    pivotX: 907, pivotY: 414, targetX: 696, targetY: 560,
     amplitude: -0.052, speed: 3.6, phase: 0,
   },
   // Only the lower leg sections move. Their armored joints stay fixed on the body.
@@ -88,7 +88,7 @@ const pieceMasks: Point[][] = [
 ]
 
 const headMask: Point[] = [
-  { x: 560, y: 15 }, { x: 890, y: 15 }, { x: 890, y: 435 }, { x: 560, y: 435 },
+  { x: 580, y: 70 }, { x: 880, y: 70 }, { x: 880, y: 420 }, { x: 580, y: 420 },
 ]
 
 function tracePolygon(context: CanvasRenderingContext2D, points: Point[], offsetX = 0, offsetY = 0) {
@@ -496,12 +496,12 @@ export function DragonScene() {
   return (
     <div
       ref={hostRef}
-      className="relative min-h-[360px] w-full overflow-visible sm:min-h-[440px] lg:-ml-32 lg:min-h-[620px] lg:w-[calc(100%+10rem)]"
+      className="relative min-h-[360px] w-full overflow-visible sm:min-h-[440px] lg:min-h-[620px]"
       aria-label="Mechanical DEVthon dragon with animated wings and fire breath"
       role="img"
     >
-      <canvas ref={fireCanvasRef} className="pointer-events-none absolute top-0 h-full" />
       <canvas ref={dragonCanvasRef} className="absolute inset-0 h-full w-full" />
+      <canvas ref={fireCanvasRef} className="pointer-events-none absolute top-0 h-full" />
     </div>
   )
 }

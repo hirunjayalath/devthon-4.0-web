@@ -3,7 +3,7 @@ import { DragonScene } from './DragonScene'
 export function HeroSection({ onRegister }: { onRegister: () => void }) {
   return (
     <section className="relative isolate overflow-hidden px-6 py-16 md:px-12">
-      <div className="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.04fr_0.96fr]">
+      <div className="mx-auto grid max-w-[90rem] items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="min-w-0">
           <p className="mb-5 font-bold uppercase tracking-[0.35em] text-orange-400">Web development competition</p>
           <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-tight md:text-8xl">Design your dreams <span className="text-orange-500">into reality.</span></h1>
