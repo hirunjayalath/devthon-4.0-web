@@ -94,7 +94,7 @@ export function GallerySection() {
     <section id="gallery" className="reveal-on-scroll scroll-mt-16 bg-[#171419] px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 max-w-2xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Gallery</p>
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-white/60">Gallery</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Three editions. One growing story.</h2>
         </div>
 
@@ -104,10 +104,10 @@ export function GallerySection() {
             const hasManyPhotos = moments.length > 6
 
             return (
-              <article key={edition.name} className="border-t border-orange-400/35 pt-6">
+              <article key={edition.name} className="border-t border-white/20 pt-6">
                 <header className="mb-6">
                   <h3 className="text-2xl font-black md:text-3xl">
-                    <span className="text-white">DEV</span><span className="text-orange-500">{'{thon}'}</span> {edition.name}
+                    DEV{'{thon}'} {edition.name}
                   </h3>
                 </header>
 
@@ -115,7 +115,7 @@ export function GallerySection() {
                   <button
                     type="button"
                     onClick={() => setSelectedImage(featured)}
-                    className={`group relative overflow-hidden border border-orange-300/15 bg-[#111014] text-left focus-visible:outline-2 focus-visible:outline-orange-500 ${hasManyPhotos ? 'aspect-[16/9] md:aspect-[16/7]' : 'min-h-[20rem] lg:min-h-full'}`}
+                    className={`group relative overflow-hidden border border-white/15 bg-[#111014] text-left focus-visible:outline-2 focus-visible:outline-white ${hasManyPhotos ? 'aspect-[16/9] md:aspect-[16/7]' : 'min-h-[20rem] lg:min-h-full'}`}
                     aria-label={`Open ${featured.caption}`}
                   >
                     <img className="absolute inset-0 h-full w-full object-cover" src={featured.src} alt={featured.alt} loading="lazy" />
@@ -127,7 +127,7 @@ export function GallerySection() {
                         key={image.src}
                         type="button"
                         onClick={() => setSelectedImage(image)}
-                        className="group relative aspect-[4/3] overflow-hidden border border-orange-300/15 bg-[#111014] text-left transition-colors hover:border-orange-500/70 focus-visible:outline-2 focus-visible:outline-orange-500"
+                        className="group relative aspect-[4/3] overflow-hidden border border-white/15 bg-[#111014] text-left transition-colors hover:border-white/50 focus-visible:outline-2 focus-visible:outline-white"
                         aria-label={`Open ${image.caption}`}
                       >
                         <img className="h-full w-full object-cover" src={image.src} alt={image.alt} loading="lazy" />
@@ -151,9 +151,9 @@ export function GallerySection() {
             if (event.currentTarget === event.target) setSelectedImage(null)
           }}
         >
-          <div className="relative max-h-full max-w-6xl border border-orange-300/25 bg-[#111014]">
+          <div className="relative max-h-full max-w-6xl border border-white/25 bg-[#111014]">
             <img className="max-h-[82vh] w-auto max-w-full object-contain" src={selectedImage.src} alt={selectedImage.alt} />
-            <button type="button" onClick={() => setSelectedImage(null)} className="absolute right-0 top-0 border-b border-l border-orange-300/20 bg-[#111014] px-5 py-3 text-sm font-bold text-orange-400 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-orange-500">
+            <button type="button" onClick={() => setSelectedImage(null)} className="absolute right-0 top-0 border-b border-l border-white/20 bg-[#111014] px-5 py-3 text-sm font-bold text-white transition-colors hover:text-white/70 focus-visible:outline-2 focus-visible:outline-white">
               Close
             </button>
           </div>
