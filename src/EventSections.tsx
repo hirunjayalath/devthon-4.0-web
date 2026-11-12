@@ -104,7 +104,7 @@ export function EventTimeline() {
         <CategoryTabs active={category} onChange={setCategory} />
 
         <div className="relative mx-auto max-w-5xl">
-          <div className="absolute bottom-0 left-5 top-0 w-px bg-gradient-to-b from-orange-500/10 via-orange-500/80 to-orange-500/10 md:left-1/2" />
+          <div className="absolute bottom-0 left-5 top-0 w-px bg-orange-500/50 md:left-1/2" />
           {items.map((item, index) => {
             const isLeft = index % 2 === 0
             return (
@@ -120,7 +120,7 @@ export function EventTimeline() {
                 >
                   <div className="mb-4 flex items-center justify-between gap-4">
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400">Competition stage</p>
-                    <span className="h-px flex-1 bg-gradient-to-r from-orange-500/40 to-transparent" />
+                    <span className="h-px flex-1 bg-orange-500/40" />
                   </div>
                   <h3 className="text-2xl font-black">{item.stage}</h3>
                   <p className="mt-3 text-sm font-bold text-orange-200">{item.date}</p>
@@ -157,7 +157,7 @@ export function PrizePool() {
               key={placement.title}
               className={`relative overflow-hidden border p-7 text-center ${
                 index === 0
-                  ? 'border-orange-400/40 bg-gradient-to-b from-orange-500/20 to-[#171419]'
+                  ? 'border-orange-400/40 bg-[#171419]'
                   : 'border-orange-300/10 bg-[#171419]'
               }`}
             >
@@ -168,7 +168,7 @@ export function PrizePool() {
           ))}
         </div>
 
-        <div className="mt-6 border border-orange-400/25 bg-orange-500/10 p-7 text-center">
+        <div className="mt-6 border border-orange-400/25 bg-[#171419] p-7 text-center">
           <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-300">Total Prize Pool</p>
           <p className="mt-2 text-4xl font-black md:text-5xl">{prize.total}</p>
         </div>

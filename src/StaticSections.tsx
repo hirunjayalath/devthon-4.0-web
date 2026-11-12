@@ -52,8 +52,8 @@ export function CategoryOverview() {
         <SectionTitle eyebrow="Choose your track" title="Two categories. One shared ambition." text="The final eligibility rules, team sizes and submission requirements will be added once confirmed by the organizing committee." />
         <div className="grid gap-6 md:grid-cols-2">
           {categories.map(([title, copy]) => (
-            <article key={title} className="border border-orange-300/15 bg-gradient-to-br from-orange-500/15 to-transparent p-8">
-              <div className="h-px w-20 bg-gradient-to-r from-orange-500/70 to-transparent" />
+            <article key={title} className="border border-orange-300/15 bg-[#111014] p-8">
+              <div className="h-px w-20 bg-orange-500/70" />
               <h3 className="mt-16 text-3xl font-black">{title}</h3>
               <p className="mt-4 max-w-lg leading-7 text-orange-100/60">{copy}</p>
             </article>
