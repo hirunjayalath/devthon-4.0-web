@@ -97,11 +97,10 @@ export function GallerySection() {
 
             return (
               <article key={edition.name} className="border-t border-orange-400/35 pt-6">
-                <header className="mb-6 flex items-end justify-between gap-5">
+                <header className="mb-6">
                   <h3 className="text-2xl font-black md:text-3xl">
                     <span className="text-white">DEV</span><span className="text-orange-500">{'{thon}'}</span> {edition.name}
                   </h3>
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-100/45">{edition.images.length} photographs</p>
                 </header>
 
                 <div className="grid gap-2 lg:grid-cols-[1.35fr_1fr]">
@@ -112,10 +111,6 @@ export function GallerySection() {
                     aria-label={`Open ${featured.caption}`}
                   >
                     <img className="absolute inset-0 h-full w-full object-cover" src={featured.src} alt={featured.alt} loading="lazy" />
-                    <span className="absolute inset-x-0 bottom-0 border-t border-orange-300/15 bg-[#111014]/92 px-5 py-4">
-                      <span className="block text-xs font-bold uppercase tracking-[0.18em] text-orange-400">Featured</span>
-                      <span className="mt-1 block font-bold text-white">{featured.caption}</span>
-                    </span>
                   </button>
 
                   <div className="grid grid-cols-2 gap-2">
@@ -128,7 +123,6 @@ export function GallerySection() {
                         aria-label={`Open ${image.caption}`}
                       >
                         <img className="h-full w-full object-cover" src={image.src} alt={image.alt} loading="lazy" />
-                        <span className="absolute inset-x-0 bottom-0 border-t border-orange-300/10 bg-[#111014]/90 px-3 py-2 text-xs font-bold text-white">{image.caption}</span>
                       </button>
                     ))}
                   </div>
@@ -151,12 +145,9 @@ export function GallerySection() {
         >
           <div className="relative max-h-full max-w-6xl border border-orange-300/25 bg-[#111014]">
             <img className="max-h-[82vh] w-auto max-w-full object-contain" src={selectedImage.src} alt={selectedImage.alt} />
-            <div className="flex items-center justify-between gap-6 border-t border-orange-300/15 px-4 py-3">
-              <p className="font-bold text-white">{selectedImage.caption}</p>
-              <button type="button" onClick={() => setSelectedImage(null)} className="border-l border-orange-300/20 px-4 py-2 text-sm font-bold text-orange-400 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-orange-500">
-                Close
-              </button>
-            </div>
+            <button type="button" onClick={() => setSelectedImage(null)} className="absolute right-0 top-0 border-b border-l border-orange-300/20 bg-[#111014] px-5 py-3 text-sm font-bold text-orange-400 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-orange-500">
+              Close
+            </button>
           </div>
         </div>
       )}
