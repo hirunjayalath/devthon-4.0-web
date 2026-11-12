@@ -106,6 +106,48 @@ function removeSpriteGlow(context: CanvasRenderingContext2D) {
   context.putImageData(imageData, 0, 0)
 }
 
+function closeWingSockets(
+  context: CanvasRenderingContext2D,
+  sourceCanvas: HTMLCanvasElement,
+) {
+  const covers = [
+    { x: 580, y: 620, sampleX: 615, sampleY: 662, rotation: -0.08 },
+    { x: 714, y: 625, sampleX: 760, sampleY: 660, rotation: 0.08 },
+  ]
+
+  covers.forEach(({ x, y, sampleX, sampleY, rotation }) => {
+    context.save()
+    context.translate(x, y)
+    context.rotate(rotation)
+    context.beginPath()
+    context.moveTo(-38, -13)
+    context.lineTo(-8, -27)
+    context.lineTo(34, -17)
+    context.lineTo(39, 7)
+    context.lineTo(5, 27)
+    context.lineTo(-35, 13)
+    context.closePath()
+    context.clip()
+    context.drawImage(sourceCanvas, sampleX - 40, sampleY - 24, 80, 48, -40, -24, 80, 48)
+    context.restore()
+
+    context.save()
+    context.translate(x, y)
+    context.rotate(rotation)
+    context.beginPath()
+    context.moveTo(-35, -12)
+    context.lineTo(-7, -24)
+    context.lineTo(31, -15)
+    context.lineTo(35, 5)
+    context.lineTo(4, 23)
+    context.lineTo(-32, 11)
+    context.strokeStyle = 'rgba(255, 91, 24, 0.58)'
+    context.lineWidth = 2
+    context.stroke()
+    context.restore()
+  })
+}
+
 function prepareDragonImage(image: HTMLImageElement) {
   const sourceCanvas = document.createElement('canvas')
   sourceCanvas.width = imageWidth
@@ -121,6 +163,7 @@ function prepareDragonImage(image: HTMLImageElement) {
   const bodyContext = bodyCanvas.getContext('2d')
   if (!bodyContext) return null
   bodyContext.drawImage(sourceCanvas, 0, 0)
+  closeWingSockets(bodyContext, sourceCanvas)
 
   const pieceCanvases = dragonPieces.map((piece, index) => {
     const pieceCanvas = document.createElement('canvas')
