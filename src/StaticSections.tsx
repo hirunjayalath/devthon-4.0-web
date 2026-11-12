@@ -8,7 +8,7 @@ import leoUomLogo from './assets/organizers/leo-uom.png'
 function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
   return (
     <div className="mb-10 max-w-2xl">
-      <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">{eyebrow}</p>
+      <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">{eyebrow}</p>
       <h2 className="text-3xl font-black tracking-tight md:text-5xl">{title}</h2>
       <p className="mt-4 text-base leading-7 text-orange-100/60">{text}</p>
     </div>
@@ -27,9 +27,9 @@ export function AboutSection() {
       <div className="mx-auto max-w-7xl">
         <SectionTitle eyebrow="About the event" title="Learning through development" text="Turn an idea into a proposal, refine the user experience and demonstrate a working solution with guidance from mentors and facilitators." />
         <div className="grid gap-5 md:grid-cols-3">
-          {cards.map(([title, copy]) => (
+          {cards.map(([title, copy], index) => (
             <article key={title} className="border border-orange-300/10 bg-[#111014] p-7 transition hover:-translate-y-1 hover:border-orange-500/40">
-              <div className="h-px w-14 bg-orange-500/60" />
+              <p className="code-key">event.{['vision', 'mission', 'objectives'][index]}</p>
               <h3 className="mt-7 text-xl font-bold">{title}</h3>
               <p className="mt-3 leading-7 text-orange-100/55">{copy}</p>
             </article>
@@ -51,10 +51,10 @@ export function CategoryOverview() {
       <div className="mx-auto max-w-7xl">
         <SectionTitle eyebrow="Choose your track" title="Two categories. One shared ambition." text="The final eligibility rules, team sizes and submission requirements will be added once confirmed by the organizing committee." />
         <div className="grid gap-6 md:grid-cols-2">
-          {categories.map(([title, copy]) => (
+          {categories.map(([title, copy], index) => (
             <article key={title} className="border border-orange-300/15 bg-[#111014] p-8">
-              <div className="h-px w-20 bg-orange-500/70" />
-              <h3 className="mt-16 text-3xl font-black">{title}</h3>
+              <p className="code-key">track.{index === 0 ? 'school' : 'university'}</p>
+              <h3 className="mt-12 text-3xl font-black">{title}</h3>
               <p className="mt-4 max-w-lg leading-7 text-orange-100/60">{copy}</p>
             </article>
           ))}
@@ -102,7 +102,7 @@ export function OrganizersSection() {
                 />
               </div>
               <div>
-                <div className="h-px w-16 bg-orange-500/40" />
+                <p className="code-key">organizer.{organizer.role === 'Lead organizer' ? 'lead' : 'coOrganizer'}</p>
                 <p className="mt-6 text-xs font-bold uppercase tracking-[0.2em] text-orange-400">{organizer.role}</p>
                 <h3 className="mt-2 text-2xl font-black">{organizer.name}</h3>
                 <p className="mt-4 leading-7 text-orange-100/55">{organizer.description}</p>
@@ -164,7 +164,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
     <section id="contact" className="scroll-mt-16 px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-2xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Contact us</p>
+          <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Contact us</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Organizing team</h2>
           <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
@@ -202,7 +202,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                 <div className={`absolute left-0 top-0 h-0.5 bg-orange-500 transition-[width] duration-300 ${activeContact === index ? 'w-full' : 'w-0'}`} />
 
                 <div className="absolute inset-x-0 bottom-0 bg-[#111014]/95 p-6">
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400">{contact.position}</p>
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400"><span className="text-orange-100/40">role: </span>{contact.position}</p>
                   <h3 className="mt-2 text-xl font-black md:text-2xl">{contact.name}</h3>
                   <div className={`grid transition-[grid-template-rows,opacity] duration-300 ${activeContact === index ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">

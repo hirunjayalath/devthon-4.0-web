@@ -9,6 +9,49 @@ body { margin: 0; min-width: 320px; background: #111014; color: #ffffff; font-fa
 button, a { -webkit-tap-highlight-color: transparent; }
 body.is-loading { overflow: hidden; }
 
+.code-frame {
+  position: relative;
+  border-left: 1px solid rgba(249, 115, 22, 0.42);
+  padding-left: clamp(1rem, 2vw, 1.75rem);
+}
+
+.code-frame::before {
+  content: attr(data-code-file) ' {';
+  display: block;
+  margin-bottom: 1.25rem;
+  color: rgba(255, 237, 213, 0.42);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.code-frame::after {
+  content: '}';
+  display: block;
+  margin-top: 1.5rem;
+  color: rgba(249, 115, 22, 0.55);
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.code-comment::before {
+  content: '// ';
+  color: rgba(255, 237, 213, 0.38);
+}
+
+.code-key {
+  color: #fb923c;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.code-key::after {
+  content: ';';
+  color: rgba(255, 237, 213, 0.38);
+}
+
 .loading-screen {
   position: fixed;
   inset: 0;

@@ -96,7 +96,7 @@ export function EventTimeline() {
     <section id="timeline" className="reveal-on-scroll bg-[#171419] px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 max-w-2xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Mark your calendar</p>
+          <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Mark your calendar</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Competition timeline</h2>
           <p className="mt-4 leading-7 text-orange-100/60">Switch between the two categories to see every competition stage, workshop and finale date.</p>
         </div>
@@ -119,13 +119,13 @@ export function EventTimeline() {
                   }`}
                 >
                   <div className="mb-4 flex items-center justify-between gap-4">
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400">Competition stage</p>
+                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400">stage:</p>
                     <span className="h-px flex-1 bg-orange-500/40" />
                   </div>
                   <h3 className="text-2xl font-black">{item.stage}</h3>
-                  <p className="mt-3 text-sm font-bold text-orange-200">{item.date}</p>
+                  <p className="mt-3 text-sm font-bold text-orange-200"><span className="text-orange-100/40">date: </span>{item.date}</p>
                   {item.related?.map((detail) => (
-                    <p key={detail} className="mt-4 border border-orange-300/10 bg-orange-500/5 px-4 py-3 text-xs leading-5 text-orange-100/55">{detail}</p>
+                    <p key={detail} className="mt-4 border border-orange-300/10 px-4 py-3 text-xs leading-5 text-orange-100/55"><span className="text-orange-400">session: </span>{detail}</p>
                   ))}
                 </article>
               </div>
@@ -145,7 +145,7 @@ export function PrizePool() {
     <section id="prizes" className="reveal-on-scroll px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 max-w-2xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Recognition</p>
+          <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Recognition</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Awards & prizes</h2>
         </div>
 
@@ -161,15 +161,15 @@ export function PrizePool() {
                   : 'border-orange-300/10 bg-[#171419]'
               }`}
             >
-              <div className="mx-auto h-px w-12 bg-orange-500/60" />
+              <p className="code-key text-left">rank[{index}]</p>
               <h3 className="mt-5 text-xl font-black">{placement.title}</h3>
-              <p className="mt-3 text-3xl font-black text-orange-400">{placement.amount}</p>
+              <p className="mt-3 text-3xl font-black text-orange-400"><span className="mr-2 text-sm font-bold text-orange-100/40">prize:</span>{placement.amount}</p>
             </article>
           ))}
         </div>
 
         <div className="mt-6 border border-orange-400/25 bg-[#171419] p-7 text-center">
-          <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-300">Total Prize Pool</p>
+          <p className="text-xs font-bold uppercase tracking-[0.25em] text-orange-300"><span className="text-orange-100/40">const </span>totalPrizePool</p>
           <p className="mt-2 text-4xl font-black md:text-5xl">{prize.total}</p>
         </div>
       </div>

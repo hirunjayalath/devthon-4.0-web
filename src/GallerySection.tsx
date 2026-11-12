@@ -94,7 +94,7 @@ export function GallerySection() {
     <section id="gallery" className="reveal-on-scroll scroll-mt-16 bg-[#171419] px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 max-w-2xl">
-          <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-white/60">Gallery</p>
+          <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-white/60">Gallery</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Three editions. One growing story.</h2>
         </div>
 
@@ -106,6 +106,7 @@ export function GallerySection() {
             return (
               <article key={edition.name} className="border-t border-white/20 pt-6">
                 <header className="mb-6">
+                  <p className="code-key mb-2">archive['{edition.name}']</p>
                   <h3 className="text-2xl font-black md:text-3xl">
                     DEV{'{thon}'} {edition.name}
                   </h3>
