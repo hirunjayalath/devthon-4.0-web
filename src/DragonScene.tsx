@@ -20,8 +20,8 @@ const imageHeight = 1024
 
 const dragonPieces: DragonPiece[] = [
   // Far wing, near wing, then the four lower legs.
-  { sourceX: 0, sourceY: 0, width: 430, height: 300, pivotX: 400, pivotY: 150, amplitude: 0.032, speed: 3.4, phase: 0.5 },
-  { sourceX: 840, sourceY: 60, width: 696, height: 220, pivotX: 870, pivotY: 240, amplitude: -0.034, speed: 3.4, phase: 0 },
+  { sourceX: 0, sourceY: 0, width: 580, height: 500, pivotX: 400, pivotY: 150, amplitude: 0.022, speed: 3.4, phase: 0.5 },
+  { sourceX: 680, sourceY: 70, width: 856, height: 560, pivotX: 860, pivotY: 250, amplitude: -0.024, speed: 3.4, phase: 0 },
   { sourceX: 69, sourceY: 666, width: 223, height: 256, pivotX: 261, pivotY: 707, amplitude: 0.028, speed: 1.85, phase: 0.2 },
   { sourceX: 307, sourceY: 773, width: 300, height: 225, pivotX: 522, pivotY: 788, amplitude: -0.026, speed: 1.75, phase: 1.1 },
   { sourceX: 630, sourceY: 676, width: 222, height: 246, pivotX: 753, pivotY: 707, amplitude: 0.025, speed: 1.82, phase: 2.1 },
@@ -31,31 +31,32 @@ const dragonPieces: DragonPiece[] = [
 // Each wing mask follows an existing structural rib, avoiding visible rectangular crop edges.
 const wingMasks: Point[][] = [
   [
-    { x: 90, y: 70 }, { x: 210, y: 30 }, { x: 320, y: 50 }, { x: 400, y: 125 },
-    { x: 400, y: 155 }, { x: 330, y: 140 }, { x: 270, y: 145 }, { x: 200, y: 170 },
-    { x: 145, y: 220 }, { x: 80, y: 230 }, { x: 30, y: 285 }, { x: 65, y: 220 },
-    { x: 115, y: 165 }, { x: 145, y: 110 },
+    { x: 90, y: 70 }, { x: 210, y: 25 }, { x: 320, y: 45 }, { x: 410, y: 120 },
+    { x: 460, y: 190 }, { x: 560, y: 335 }, { x: 520, y: 365 }, { x: 500, y: 480 },
+    { x: 470, y: 445 }, { x: 440, y: 360 }, { x: 400, y: 300 }, { x: 330, y: 280 },
+    { x: 270, y: 300 }, { x: 220, y: 275 }, { x: 160, y: 230 }, { x: 90, y: 225 },
+    { x: 30, y: 285 }, { x: 65, y: 215 }, { x: 115, y: 160 }, { x: 145, y: 105 },
   ],
   [
-    { x: 860, y: 240 }, { x: 970, y: 145 }, { x: 1100, y: 90 }, { x: 1300, y: 90 },
-    { x: 1450, y: 135 }, { x: 1515, y: 175 }, { x: 1380, y: 210 }, { x: 1250, y: 230 },
-    { x: 1100, y: 205 }, { x: 980, y: 205 }, { x: 900, y: 240 },
+    { x: 760, y: 190 }, { x: 1000, y: 90 }, { x: 1200, y: 80 }, { x: 1370, y: 105 },
+    { x: 1510, y: 165 }, { x: 1400, y: 210 }, { x: 1470, y: 430 }, { x: 1370, y: 320 },
+    { x: 1280, y: 305 }, { x: 1300, y: 450 }, { x: 1200, y: 350 }, { x: 1100, y: 385 },
+    { x: 1000, y: 360 }, { x: 990, y: 540 }, { x: 920, y: 380 }, { x: 800, y: 530 },
+    { x: 800, y: 420 }, { x: 700, y: 620 }, { x: 690, y: 500 }, { x: 740, y: 350 },
   ],
 ]
 
-// The body cutouts are slightly smaller along the structural ribs. The retained strip sits above
-// the moving layer and keeps the attachment closed throughout the flap cycle.
-const bodyWingMasks: Point[][] = [
+// These foreground areas restore the head and torso above the moving wing layers.
+const foregroundMasks: Point[][] = [
   [
-    { x: 90, y: 70 }, { x: 210, y: 30 }, { x: 320, y: 50 }, { x: 400, y: 125 },
-    { x: 400, y: 140 }, { x: 330, y: 125 }, { x: 270, y: 130 }, { x: 200, y: 155 },
-    { x: 145, y: 205 }, { x: 80, y: 215 }, { x: 30, y: 285 }, { x: 65, y: 220 },
-    { x: 115, y: 165 }, { x: 145, y: 110 },
+    { x: 120, y: 270 }, { x: 220, y: 235 }, { x: 360, y: 230 }, { x: 520, y: 240 },
+    { x: 570, y: 360 }, { x: 520, y: 530 }, { x: 430, y: 620 }, { x: 250, y: 620 },
+    { x: 110, y: 480 },
   ],
   [
-    { x: 860, y: 240 }, { x: 970, y: 145 }, { x: 1100, y: 90 }, { x: 1300, y: 90 },
-    { x: 1450, y: 135 }, { x: 1515, y: 175 }, { x: 1380, y: 195 }, { x: 1250, y: 215 },
-    { x: 1100, y: 190 }, { x: 980, y: 190 }, { x: 900, y: 225 }, { x: 860, y: 225 },
+    { x: 350, y: 400 }, { x: 550, y: 330 }, { x: 750, y: 320 }, { x: 900, y: 350 },
+    { x: 1040, y: 520 }, { x: 980, y: 680 }, { x: 800, y: 700 }, { x: 480, y: 700 },
+    { x: 330, y: 620 },
   ],
 ]
 
@@ -105,6 +106,24 @@ function prepareDragonImage(image: HTMLImageElement) {
   if (!bodyContext) return null
   bodyContext.drawImage(keyedCanvas, 0, 0)
 
+  const foregroundCanvas = document.createElement('canvas')
+  foregroundCanvas.width = imageWidth
+  foregroundCanvas.height = imageHeight
+  const foregroundContext = foregroundCanvas.getContext('2d')
+  if (!foregroundContext) return null
+  foregroundContext.save()
+  foregroundContext.beginPath()
+  foregroundMasks.forEach((mask) => {
+    foregroundContext.moveTo(mask[0].x, mask[0].y)
+    for (let index = 1; index < mask.length; index += 1) {
+      foregroundContext.lineTo(mask[index].x, mask[index].y)
+    }
+    foregroundContext.closePath()
+  })
+  foregroundContext.clip()
+  foregroundContext.drawImage(keyedCanvas, 0, 0)
+  foregroundContext.restore()
+
   const pieceCanvases = dragonPieces.map((piece, index) => {
     const pieceCanvas = document.createElement('canvas')
     pieceCanvas.width = piece.width
@@ -136,7 +155,7 @@ function prepareDragonImage(image: HTMLImageElement) {
   dragonPieces.forEach((piece, index) => {
     if (index < wingMasks.length) {
       bodyContext.save()
-      tracePolygon(bodyContext, bodyWingMasks[index])
+      tracePolygon(bodyContext, wingMasks[index])
       bodyContext.clip()
       bodyContext.clearRect(piece.sourceX, piece.sourceY, piece.width, piece.height)
       bodyContext.restore()
@@ -145,7 +164,7 @@ function prepareDragonImage(image: HTMLImageElement) {
     bodyContext.clearRect(piece.sourceX, piece.sourceY, piece.width, piece.height)
   })
 
-  return { bodyCanvas, pieceCanvases }
+  return { bodyCanvas, foregroundCanvas, pieceCanvases }
 }
 
 export function DragonScene() {
@@ -166,6 +185,7 @@ export function DragonScene() {
     const pointer = { x: -10000, y: -10000, active: false }
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let bodyCanvas: HTMLCanvasElement | null = null
+    let foregroundCanvas: HTMLCanvasElement | null = null
     let pieceCanvases: HTMLCanvasElement[] = []
     let animationFrame = 0
     let disposed = false
@@ -183,6 +203,7 @@ export function DragonScene() {
       const preparedImage = prepareDragonImage(image)
       if (!preparedImage || disposed) return
       bodyCanvas = preparedImage.bodyCanvas
+      foregroundCanvas = preparedImage.foregroundCanvas
       pieceCanvases = preparedImage.pieceCanvases
     }
 
@@ -222,7 +243,7 @@ export function DragonScene() {
 
     const drawDragon = (elapsed: number) => {
       dragonContext.clearRect(0, 0, displayWidth, displayHeight)
-      if (!bodyCanvas || pieceCanvases.length !== dragonPieces.length) return
+      if (!bodyCanvas || !foregroundCanvas || pieceCanvases.length !== dragonPieces.length) return
 
       const { scale, offsetX, offsetY } = getPlacement()
       const drawPiece = (index: number) => {
@@ -244,10 +265,27 @@ export function DragonScene() {
         dragonContext.restore()
       }
 
-      // Wings sit behind the static body, so their mechanical joints stay covered while flapping.
+      // A faint resting-position layer acts as natural motion blur and prevents momentary pinholes
+      // between the articulated wing membranes at the extremes of the flap.
+      dragonContext.save()
+      dragonContext.globalAlpha = 0.08
+      for (let index = 0; index < 2; index += 1) {
+        const piece = dragonPieces[index]
+        dragonContext.drawImage(
+          pieceCanvases[index],
+          offsetX + piece.sourceX * scale,
+          offsetY + piece.sourceY * scale,
+          piece.width * scale,
+          piece.height * scale,
+        )
+      }
+      dragonContext.restore()
+
+      // Complete wings sit behind the static foreground, keeping the body and joints still.
       drawPiece(0)
       drawPiece(1)
       dragonContext.drawImage(bodyCanvas, offsetX, offsetY, imageWidth * scale, imageHeight * scale)
+      dragonContext.drawImage(foregroundCanvas, offsetX, offsetY, imageWidth * scale, imageHeight * scale)
       for (let index = 2; index < dragonPieces.length; index += 1) drawPiece(index)
     }
 
