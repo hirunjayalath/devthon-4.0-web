@@ -19,6 +19,9 @@ type Point = { x: number; y: number }
 
 const imageWidth = 1536
 const imageHeight = 1024
+const headSource = { x: 250, y: 370, width: 350, height: 270 }
+const headPivot = { x: 470, y: 598 }
+const mouthPoint = { x: 315, y: 548 }
 
 const dragonPieces: DragonPiece[] = [
   // The sprite sheet contains two complete, separate wings. Each rotates around its
@@ -84,6 +87,13 @@ const pieceMasks: Point[][] = [
   ],
 ]
 
+const headMask: Point[] = [
+  { x: 270, y: 380 }, { x: 555, y: 380 }, { x: 575, y: 430 },
+  { x: 565, y: 500 }, { x: 535, y: 560 }, { x: 500, y: 605 },
+  { x: 440, y: 625 }, { x: 370, y: 615 }, { x: 300, y: 580 },
+  { x: 270, y: 520 },
+]
+
 function tracePolygon(context: CanvasRenderingContext2D, points: Point[], offsetX = 0, offsetY = 0) {
   context.beginPath()
   context.moveTo(points[0].x + offsetX, points[0].y + offsetY)
@@ -142,6 +152,33 @@ function prepareDragonImage(image: HTMLImageElement) {
     bodyContext.restore()
   })
 
+  const headCanvas = document.createElement('canvas')
+  headCanvas.width = headSource.width
+  headCanvas.height = headSource.height
+  const headContext = headCanvas.getContext('2d')
+  if (!headContext) return null
+  headContext.drawImage(
+    bodyCanvas,
+    headSource.x,
+    headSource.y,
+    headSource.width,
+    headSource.height,
+    0,
+    0,
+    headSource.width,
+    headSource.height,
+  )
+  headContext.globalCompositeOperation = 'destination-in'
+  tracePolygon(headContext, headMask, -headSource.x, -headSource.y)
+  headContext.fillStyle = '#fff'
+  headContext.fill()
+
+  bodyContext.save()
+  tracePolygon(bodyContext, headMask)
+  bodyContext.clip()
+  bodyContext.clearRect(0, 0, imageWidth, imageHeight)
+  bodyContext.restore()
+
   const jointCanvas = document.createElement('canvas')
   jointCanvas.width = imageWidth
   jointCanvas.height = imageHeight
@@ -153,11 +190,13 @@ function prepareDragonImage(image: HTMLImageElement) {
     jointContext.moveTo(piece.pivotX + 25, piece.pivotY)
     jointContext.arc(piece.pivotX, piece.pivotY, 25, 0, Math.PI * 2)
   })
+  jointContext.moveTo(headPivot.x + 36, headPivot.y)
+  jointContext.arc(headPivot.x, headPivot.y, 36, 0, Math.PI * 2)
   jointContext.clip()
   jointContext.drawImage(sourceCanvas, 0, 0)
   jointContext.restore()
 
-  return { bodyCanvas, jointCanvas, pieceCanvases }
+  return { bodyCanvas, headCanvas, jointCanvas, pieceCanvases }
 }
 
 export function DragonScene() {
@@ -178,6 +217,7 @@ export function DragonScene() {
     const pointer = { x: -10000, y: -10000, active: false }
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     let bodyCanvas: HTMLCanvasElement | null = null
+    let headCanvas: HTMLCanvasElement | null = null
     let jointCanvas: HTMLCanvasElement | null = null
     let pieceCanvases: HTMLCanvasElement[] = []
     let animationFrame = 0
@@ -188,6 +228,7 @@ export function DragonScene() {
     let fireInsetLeft = 0
     let fireWidth = 1
     let fireHeight = 1
+    let headAngle = 0
 
     const image = new Image()
     image.decoding = 'async'
@@ -196,6 +237,7 @@ export function DragonScene() {
       const preparedImage = prepareDragonImage(image)
       if (!preparedImage || disposed) return
       bodyCanvas = preparedImage.bodyCanvas
+      headCanvas = preparedImage.headCanvas
       jointCanvas = preparedImage.jointCanvas
       pieceCanvases = preparedImage.pieceCanvases
     }
@@ -242,7 +284,7 @@ export function DragonScene() {
 
     const drawDragon = (elapsed: number) => {
       dragonContext.clearRect(0, 0, displayWidth, displayHeight)
-      if (!bodyCanvas || !jointCanvas || pieceCanvases.length !== dragonPieces.length) return
+      if (!bodyCanvas || !headCanvas || !jointCanvas || pieceCanvases.length !== dragonPieces.length) return
 
       const { scale, offsetX, offsetY } = getPlacement()
       const drawPiece = (index: number) => {
@@ -266,8 +308,45 @@ export function DragonScene() {
 
       // Complete wings and lower legs move behind the fixed body. No membrane is divided.
       dragonPieces.forEach((_, index) => drawPiece(index))
+
+      const headPivotX = offsetX + headPivot.x * scale
+      const headPivotY = offsetY + headPivot.y * scale
+      dragonContext.save()
+      dragonContext.translate(headPivotX, headPivotY)
+      dragonContext.rotate(headAngle)
+      dragonContext.drawImage(
+        headCanvas,
+        (headSource.x - headPivot.x) * scale,
+        (headSource.y - headPivot.y) * scale,
+        headSource.width * scale,
+        headSource.height * scale,
+      )
+      dragonContext.restore()
+
       dragonContext.drawImage(bodyCanvas, offsetX, offsetY, imageWidth * scale, imageHeight * scale)
       dragonContext.drawImage(jointCanvas, offsetX, offsetY, imageWidth * scale, imageHeight * scale)
+    }
+
+    const updateHeadTracking = () => {
+      if (reducedMotion || !pointer.active) {
+        headAngle += (0 - headAngle) * 0.1
+        return
+      }
+
+      const { scale, offsetX, offsetY } = getPlacement()
+      const mouthX = offsetX + mouthPoint.x * scale
+      const mouthY = offsetY + mouthPoint.y * scale
+      const dx = pointer.x - fireInsetLeft - mouthX
+      const dy = pointer.y - mouthY
+
+      // In this side view the head only follows targets in front of the dragon.
+      let targetAngle = 0
+      if (dx < -28) {
+        const rawAngle = Math.atan2(dy, dx)
+        const forwardOffset = Math.atan2(Math.sin(rawAngle - Math.PI), Math.cos(rawAngle - Math.PI))
+        targetAngle = Math.max(-0.15, Math.min(0.15, forwardOffset * 0.42))
+      }
+      headAngle += (targetAngle - headAngle) * 0.1
     }
 
     const drawFire = (time: number) => {
@@ -275,8 +354,14 @@ export function DragonScene() {
       if (!pointer.active || reducedMotion || !bodyCanvas || pointer.y < 0 || pointer.y > fireHeight) return
 
       const { scale, offsetX, offsetY } = getPlacement()
-      const mouthX = offsetX + imageWidth * 0.205 * scale + fireInsetLeft
-      const mouthY = offsetY + imageHeight * 0.535 * scale
+      const pivotX = offsetX + headPivot.x * scale
+      const pivotY = offsetY + headPivot.y * scale
+      const mouthOffsetX = (mouthPoint.x - headPivot.x) * scale
+      const mouthOffsetY = (mouthPoint.y - headPivot.y) * scale
+      const cosHead = Math.cos(headAngle)
+      const sinHead = Math.sin(headAngle)
+      const mouthX = pivotX + mouthOffsetX * cosHead - mouthOffsetY * sinHead + fireInsetLeft
+      const mouthY = pivotY + mouthOffsetX * sinHead + mouthOffsetY * cosHead
       const dx = pointer.x - mouthX
       const dy = pointer.y - mouthY
 
@@ -390,6 +475,7 @@ export function DragonScene() {
 
     const animate = (time: number) => {
       if (disposed) return
+      updateHeadTracking()
       drawDragon(time / 1000)
       drawFire(time)
       animationFrame = requestAnimationFrame(animate)
