@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import dragonTextureUrl from './assets/dragon/devthon-dragon-sprites.png'
+import dragonTextureUrl from './assets/dragon/devthon-dragon-sprites-v2.png'
 
 type DragonPiece = {
   sourceX: number
@@ -19,42 +19,43 @@ type Point = { x: number; y: number }
 
 const imageWidth = 1536
 const imageHeight = 1024
-const headSource = { x: 250, y: 370, width: 350, height: 270 }
-const headPivot = { x: 470, y: 598 }
-const mouthPoint = { x: 315, y: 548 }
+const headSource = { x: 560, y: 15, width: 330, height: 420 }
+const headPivot = { x: 755, y: 390 }
+const headTarget = { x: 450, y: 550 }
+const mouthPoint = { x: 582, y: 215 }
 
 const dragonPieces: DragonPiece[] = [
   // The sprite sheet contains two complete, separate wings. Each rotates around its
   // connector and lands on the matching shoulder socket on the wingless body.
   {
-    sourceX: 40, sourceY: 10, width: 620, height: 420,
-    pivotX: 580, pivotY: 386, targetX: 584, targetY: 620,
+    sourceX: 25, sourceY: 10, width: 550, height: 420,
+    pivotX: 528, pivotY: 395, targetX: 548, targetY: 555,
     amplitude: 0.055, speed: 3.6, phase: 0.15,
   },
   {
-    sourceX: 780, sourceY: 10, width: 756, height: 460,
-    pivotX: 831, pivotY: 411, targetX: 713, targetY: 626,
+    sourceX: 880, sourceY: 10, width: 656, height: 455,
+    pivotX: 907, pivotY: 420, targetX: 693, targetY: 560,
     amplitude: -0.052, speed: 3.6, phase: 0,
   },
   // Only the lower leg sections move. Their armored joints stay fixed on the body.
   {
-    sourceX: 235, sourceY: 835, width: 180, height: 145,
-    pivotX: 350, pivotY: 865, targetX: 350, targetY: 865,
+    sourceX: 190, sourceY: 820, width: 180, height: 160,
+    pivotX: 320, pivotY: 850, targetX: 320, targetY: 850,
     amplitude: 0.026, speed: 1.8, phase: 0.2,
   },
   {
-    sourceX: 440, sourceY: 840, width: 190, height: 184,
-    pivotX: 570, pivotY: 875, targetX: 570, targetY: 875,
+    sourceX: 410, sourceY: 835, width: 200, height: 189,
+    pivotX: 550, pivotY: 890, targetX: 550, targetY: 890,
     amplitude: -0.025, speed: 1.72, phase: 1.1,
   },
   {
-    sourceX: 640, sourceY: 835, width: 170, height: 145,
-    pivotX: 755, pivotY: 865, targetX: 755, targetY: 865,
+    sourceX: 620, sourceY: 830, width: 180, height: 150,
+    pivotX: 748, pivotY: 855, targetX: 748, targetY: 855,
     amplitude: 0.024, speed: 1.76, phase: 2.1,
   },
   {
-    sourceX: 845, sourceY: 830, width: 180, height: 194,
-    pivotX: 950, pivotY: 860, targetX: 950, targetY: 860,
+    sourceX: 840, sourceY: 825, width: 190, height: 199,
+    pivotX: 955, pivotY: 865, targetX: 955, targetY: 865,
     amplitude: -0.026, speed: 1.68, phase: 2.8,
   },
 ]
@@ -63,35 +64,31 @@ const dragonPieces: DragonPiece[] = [
 // complete wing and connector while excluding the separately rendered body below it.
 const pieceMasks: Point[][] = [
   [
-    { x: 40, y: 10 }, { x: 660, y: 10 }, { x: 660, y: 430 },
-    { x: 525, y: 430 }, { x: 525, y: 355 }, { x: 40, y: 355 },
+    { x: 25, y: 10 }, { x: 575, y: 10 }, { x: 575, y: 430 }, { x: 25, y: 430 },
   ],
   [
-    { x: 780, y: 10 }, { x: 1536, y: 10 }, { x: 1536, y: 470 }, { x: 780, y: 470 },
+    { x: 880, y: 10 }, { x: 1536, y: 10 }, { x: 1536, y: 465 }, { x: 880, y: 465 },
   ],
   [
-    { x: 300, y: 835 }, { x: 380, y: 835 }, { x: 415, y: 920 },
-    { x: 385, y: 980 }, { x: 235, y: 980 }, { x: 235, y: 895 },
+    { x: 270, y: 820 }, { x: 340, y: 820 }, { x: 370, y: 900 },
+    { x: 350, y: 980 }, { x: 190, y: 980 }, { x: 190, y: 890 },
   ],
   [
-    { x: 515, y: 840 }, { x: 600, y: 840 }, { x: 630, y: 930 },
-    { x: 600, y: 1024 }, { x: 440, y: 1024 }, { x: 440, y: 925 },
+    { x: 500, y: 835 }, { x: 585, y: 835 }, { x: 610, y: 930 },
+    { x: 590, y: 1024 }, { x: 410, y: 1024 }, { x: 410, y: 925 },
   ],
   [
-    { x: 700, y: 835 }, { x: 785, y: 835 }, { x: 810, y: 925 },
-    { x: 780, y: 980 }, { x: 640, y: 980 }, { x: 640, y: 900 },
+    { x: 690, y: 830 }, { x: 770, y: 830 }, { x: 800, y: 920 },
+    { x: 770, y: 980 }, { x: 620, y: 980 }, { x: 620, y: 900 },
   ],
   [
-    { x: 885, y: 830 }, { x: 980, y: 830 }, { x: 1025, y: 920 },
-    { x: 1010, y: 1024 }, { x: 845, y: 1024 }, { x: 845, y: 900 },
+    { x: 890, y: 825 }, { x: 980, y: 825 }, { x: 1030, y: 920 },
+    { x: 1010, y: 1024 }, { x: 840, y: 1024 }, { x: 840, y: 900 },
   ],
 ]
 
 const headMask: Point[] = [
-  { x: 270, y: 380 }, { x: 555, y: 380 }, { x: 575, y: 430 },
-  { x: 565, y: 500 }, { x: 535, y: 560 }, { x: 500, y: 605 },
-  { x: 440, y: 625 }, { x: 370, y: 615 }, { x: 300, y: 580 },
-  { x: 270, y: 520 },
+  { x: 560, y: 15 }, { x: 890, y: 15 }, { x: 890, y: 435 }, { x: 560, y: 435 },
 ]
 
 function tracePolygon(context: CanvasRenderingContext2D, points: Point[], offsetX = 0, offsetY = 0) {
@@ -190,8 +187,6 @@ function prepareDragonImage(image: HTMLImageElement) {
     jointContext.moveTo(piece.pivotX + 25, piece.pivotY)
     jointContext.arc(piece.pivotX, piece.pivotY, 25, 0, Math.PI * 2)
   })
-  jointContext.moveTo(headPivot.x + 36, headPivot.y)
-  jointContext.arc(headPivot.x, headPivot.y, 36, 0, Math.PI * 2)
   jointContext.clip()
   jointContext.drawImage(sourceCanvas, 0, 0)
   jointContext.restore()
@@ -268,10 +263,10 @@ export function DragonScene() {
     const getPlacement = () => {
       // These are the bounds of the assembled dragon rather than the full sprite sheet.
       // Fitting to them keeps the full body large without stretching the artwork.
-      const contentX = 55
-      const contentY = 235
-      const contentWidth = 1420
-      const contentHeight = 775
+      const contentX = 50
+      const contentY = 155
+      const contentWidth = 1320
+      const contentHeight = 845
       const scale = Math.min(displayWidth / contentWidth, displayHeight / contentHeight) * 1.02
       const renderedWidth = contentWidth * scale
       const renderedHeight = contentHeight * scale
@@ -309,8 +304,8 @@ export function DragonScene() {
       // Complete wings and lower legs move behind the fixed body. No membrane is divided.
       dragonPieces.forEach((_, index) => drawPiece(index))
 
-      const headPivotX = offsetX + headPivot.x * scale
-      const headPivotY = offsetY + headPivot.y * scale
+      const headPivotX = offsetX + headTarget.x * scale
+      const headPivotY = offsetY + headTarget.y * scale
       dragonContext.save()
       dragonContext.translate(headPivotX, headPivotY)
       dragonContext.rotate(headAngle)
@@ -334,8 +329,8 @@ export function DragonScene() {
       }
 
       const { scale, offsetX, offsetY } = getPlacement()
-      const mouthX = offsetX + mouthPoint.x * scale
-      const mouthY = offsetY + mouthPoint.y * scale
+      const mouthX = offsetX + (headTarget.x + mouthPoint.x - headPivot.x) * scale
+      const mouthY = offsetY + (headTarget.y + mouthPoint.y - headPivot.y) * scale
       const dx = pointer.x - fireInsetLeft - mouthX
       const dy = pointer.y - mouthY
 
@@ -354,8 +349,8 @@ export function DragonScene() {
       if (!pointer.active || reducedMotion || !bodyCanvas || pointer.y < 0 || pointer.y > fireHeight) return
 
       const { scale, offsetX, offsetY } = getPlacement()
-      const pivotX = offsetX + headPivot.x * scale
-      const pivotY = offsetY + headPivot.y * scale
+      const pivotX = offsetX + headTarget.x * scale
+      const pivotY = offsetY + headTarget.y * scale
       const mouthOffsetX = (mouthPoint.x - headPivot.x) * scale
       const mouthOffsetY = (mouthPoint.y - headPivot.y) * scale
       const cosHead = Math.cos(headAngle)
