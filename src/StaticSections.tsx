@@ -233,6 +233,7 @@ export function Footer() {
     ['About', '#about'],
     ['Timeline', '#timeline'],
     ['Prizes', '#prizes'],
+    ['Gallery', '#gallery'],
     ['Organizers', '#organizers'],
     ['Contact', '#contact'],
   ]

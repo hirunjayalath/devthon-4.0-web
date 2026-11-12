@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { EventTimeline, PrizePool } from './EventSections'
+import { GallerySection } from './GallerySection'
 import { HeroSection } from './HeroSection'
 import { LoadingScreen } from './LoadingScreen'
 import { RegistrationPage } from './RegistrationPage'
@@ -20,6 +21,7 @@ function Navigation({ onRegister }: { onRegister: () => void }) {
           <a className="transition hover:text-white" href="#about">About</a>
           <a className="transition hover:text-white" href="#timeline">Timeline</a>
           <a className="transition hover:text-white" href="#prizes">Prizes</a>
+          <a className="transition hover:text-white" href="#gallery">Gallery</a>
           <a className="transition hover:text-white" href="#organizers">Organizers</a>
           <button onClick={onRegister} className="bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
         </div>
@@ -39,6 +41,7 @@ function HomePage({ onRegister }: { onRegister: () => void }) {
         <CategoryOverview />
         <EventTimeline />
         <PrizePool />
+        <GallerySection />
         <OrganizersSection />
         <ContactSection onRegister={onRegister} />
       </main>
