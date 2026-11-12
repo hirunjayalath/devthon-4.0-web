@@ -249,7 +249,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 pb-12 text-sm text-orange-100/70 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>
-            <a href="#home" className="text-3xl font-black tracking-tight text-white">
+            <a href="#home" className="brand-wordmark text-3xl font-black tracking-tight text-white">
               DEV<span className="text-orange-500">{'{thon}'} 4.0</span>
             </a>
             <p className="mt-3">Design your dreams into reality.</p>
@@ -289,7 +289,7 @@ export function Footer() {
           </ul>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-2 py-6 text-sm text-orange-100/60">
-          <p>© 2026 <strong className="text-white">DEV<span className="text-orange-500">{'{thon}'} 4.0</span></strong> · All rights reserved</p>
+          <p>© 2026 <strong className="brand-wordmark text-white">DEV<span className="text-orange-500">{'{thon}'} 4.0</span></strong> · All rights reserved</p>
           <a href="#home" className="transition hover:text-orange-400">Back to top</a>
         </div>
       </div>

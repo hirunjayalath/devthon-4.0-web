@@ -18,7 +18,7 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
       <div className="mx-auto max-w-3xl">
         <button onClick={onBack} className="text-sm font-bold text-orange-300 hover:text-white">Back to homepage</button>
         <div className="mt-12">
-          <p className="text-xs font-black tracking-[0.3em]"><span className="text-white">DEV</span><span className="text-orange-500">{'{thon}'} 4.0</span></p>
+          <p className="brand-wordmark text-xs font-black tracking-[0.3em]"><span className="text-white">DEV</span><span className="text-orange-500">{'{thon}'} 4.0</span></p>
           <h1 className="mt-3 text-4xl font-black md:text-6xl">Team registration</h1>
           <p className="mt-4 text-orange-100/60">This frontend form is ready. We will connect it to the official registration database next.</p>
         </div>

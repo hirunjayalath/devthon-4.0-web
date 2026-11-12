@@ -14,7 +14,7 @@ function Navigation({ onRegister }: { onRegister: () => void }) {
   return (
     <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#111014]/90 px-6 py-4 backdrop-blur md:px-12">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
-        <a href="#home" className="text-xl font-black tracking-tight">
+        <a href="#home" className="brand-wordmark text-xl font-black tracking-tight">
           <span className="text-white">DEV</span><span className="text-orange-500">{'{thon}'} 4.0</span>
         </a>
         <div className="hidden items-center gap-7 text-sm text-orange-100/70 md:flex">
