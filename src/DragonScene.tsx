@@ -415,7 +415,7 @@ export function DragonScene() {
   return (
     <div
       ref={hostRef}
-      className="relative min-h-[360px] w-full overflow-visible sm:min-h-[440px] lg:min-h-[540px]"
+      className="relative min-h-[360px] w-full overflow-visible sm:min-h-[440px] lg:-ml-32 lg:min-h-[620px] lg:w-[calc(100%+10rem)]"
       aria-label="Mechanical DEVthon dragon with animated wings and fire breath"
       role="img"
     >
