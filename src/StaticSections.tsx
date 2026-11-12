@@ -169,8 +169,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
           <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
 
-        <div>
-          <div className="flex flex-col border-t border-orange-300/15 lg:h-[34rem] lg:flex-row">
+        <div className="mx-auto max-w-6xl">
+          <div className="flex flex-col border-t border-orange-300/15 lg:h-[30rem] lg:flex-row">
             {contacts.map((contact, index) => (
               <article
                 key={contact.name}
@@ -190,7 +190,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                   }
                 }}
                 aria-label={`Show contact details for ${contact.name}`}
-                className="group relative h-[28rem] cursor-pointer overflow-hidden border-b border-orange-300/15 outline-none last:border-b-0 focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-full lg:flex-1 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                className="group relative h-[25rem] cursor-pointer overflow-hidden border-b border-orange-300/15 outline-none last:border-b-0 focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-full lg:flex-1 lg:border-b-0 lg:border-r lg:last:border-r-0"
               >
                 <img
                   src={contact.photo}
