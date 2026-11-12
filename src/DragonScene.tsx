@@ -18,8 +18,8 @@ const imageHeight = 1024
 
 const dragonPieces: DragonPiece[] = [
   // Far wing, near wing, then the four lower legs.
-  { sourceX: 0, sourceY: 0, width: 476, height: 320, pivotX: 461, pivotY: 164, amplitude: 0.018, speed: 1.55, phase: 0.5 },
-  { sourceX: 860, sourceY: 41, width: 676, height: 399, pivotX: 876, pivotY: 287, amplitude: -0.02, speed: 1.55, phase: 0 },
+  { sourceX: 0, sourceY: 0, width: 476, height: 320, pivotX: 461, pivotY: 164, amplitude: 0.032, speed: 3.4, phase: 0.5 },
+  { sourceX: 860, sourceY: 41, width: 676, height: 399, pivotX: 876, pivotY: 287, amplitude: -0.035, speed: 3.4, phase: 0 },
   { sourceX: 69, sourceY: 666, width: 223, height: 256, pivotX: 261, pivotY: 707, amplitude: 0.028, speed: 1.85, phase: 0.2 },
   { sourceX: 307, sourceY: 773, width: 300, height: 225, pivotX: 522, pivotY: 788, amplitude: -0.026, speed: 1.75, phase: 1.1 },
   { sourceX: 630, sourceY: 676, width: 222, height: 246, pivotX: 753, pivotY: 707, amplitude: 0.025, speed: 1.82, phase: 2.1 },
