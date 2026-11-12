@@ -147,7 +147,6 @@ export function PrizePool() {
         <div className="mb-8 max-w-2xl">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Recognition</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Awards & prizes</h2>
-          <p className="mt-4 leading-7 text-orange-100/60">The DEV{'{thon}'} 3.0 prize structure returns for both competition categories.</p>
         </div>
 
         <CategoryTabs active={category} onChange={setCategory} />

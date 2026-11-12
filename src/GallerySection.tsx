@@ -88,7 +88,6 @@ export function GallerySection() {
         <div className="mb-16 max-w-2xl">
           <p className="mb-3 text-xs font-bold uppercase tracking-[0.3em] text-orange-400">Gallery</p>
           <h2 className="text-3xl font-black tracking-tight md:text-5xl">Three editions. One growing story.</h2>
-          <p className="mt-4 text-base leading-7 text-orange-100/60">Moments from DEV{'{thon}'} 1.0, 2.0 and 3.0.</p>
         </div>
 
         <div className="space-y-20">
