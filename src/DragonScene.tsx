@@ -13,18 +13,60 @@ type DragonPiece = {
   phase: number
 }
 
+type Point = { x: number; y: number }
+
 const imageWidth = 1536
 const imageHeight = 1024
 
 const dragonPieces: DragonPiece[] = [
   // Far wing, near wing, then the four lower legs.
-  { sourceX: 0, sourceY: 0, width: 476, height: 350, pivotX: 461, pivotY: 164, amplitude: 0.026, speed: 3.4, phase: 0.5 },
-  { sourceX: 860, sourceY: 41, width: 676, height: 399, pivotX: 876, pivotY: 287, amplitude: -0.028, speed: 3.4, phase: 0 },
+  { sourceX: 0, sourceY: 0, width: 430, height: 300, pivotX: 400, pivotY: 150, amplitude: 0.032, speed: 3.4, phase: 0.5 },
+  { sourceX: 840, sourceY: 60, width: 696, height: 220, pivotX: 870, pivotY: 240, amplitude: -0.034, speed: 3.4, phase: 0 },
   { sourceX: 69, sourceY: 666, width: 223, height: 256, pivotX: 261, pivotY: 707, amplitude: 0.028, speed: 1.85, phase: 0.2 },
   { sourceX: 307, sourceY: 773, width: 300, height: 225, pivotX: 522, pivotY: 788, amplitude: -0.026, speed: 1.75, phase: 1.1 },
   { sourceX: 630, sourceY: 676, width: 222, height: 246, pivotX: 753, pivotY: 707, amplitude: 0.025, speed: 1.82, phase: 2.1 },
   { sourceX: 799, sourceY: 768, width: 222, height: 236, pivotX: 891, pivotY: 788, amplitude: -0.028, speed: 1.72, phase: 2.8 },
 ]
+
+// Each wing mask follows an existing structural rib, avoiding visible rectangular crop edges.
+const wingMasks: Point[][] = [
+  [
+    { x: 90, y: 70 }, { x: 210, y: 30 }, { x: 320, y: 50 }, { x: 400, y: 125 },
+    { x: 400, y: 155 }, { x: 330, y: 140 }, { x: 270, y: 145 }, { x: 200, y: 170 },
+    { x: 145, y: 220 }, { x: 80, y: 230 }, { x: 30, y: 285 }, { x: 65, y: 220 },
+    { x: 115, y: 165 }, { x: 145, y: 110 },
+  ],
+  [
+    { x: 860, y: 240 }, { x: 970, y: 145 }, { x: 1100, y: 90 }, { x: 1300, y: 90 },
+    { x: 1450, y: 135 }, { x: 1515, y: 175 }, { x: 1380, y: 210 }, { x: 1250, y: 230 },
+    { x: 1100, y: 205 }, { x: 980, y: 205 }, { x: 900, y: 240 },
+  ],
+]
+
+// The body cutouts are slightly smaller along the structural ribs. The retained strip sits above
+// the moving layer and keeps the attachment closed throughout the flap cycle.
+const bodyWingMasks: Point[][] = [
+  [
+    { x: 90, y: 70 }, { x: 210, y: 30 }, { x: 320, y: 50 }, { x: 400, y: 125 },
+    { x: 400, y: 140 }, { x: 330, y: 125 }, { x: 270, y: 130 }, { x: 200, y: 155 },
+    { x: 145, y: 205 }, { x: 80, y: 215 }, { x: 30, y: 285 }, { x: 65, y: 220 },
+    { x: 115, y: 165 }, { x: 145, y: 110 },
+  ],
+  [
+    { x: 860, y: 240 }, { x: 970, y: 145 }, { x: 1100, y: 90 }, { x: 1300, y: 90 },
+    { x: 1450, y: 135 }, { x: 1515, y: 175 }, { x: 1380, y: 195 }, { x: 1250, y: 215 },
+    { x: 1100, y: 190 }, { x: 980, y: 190 }, { x: 900, y: 225 }, { x: 860, y: 225 },
+  ],
+]
+
+function tracePolygon(context: CanvasRenderingContext2D, points: Point[], offsetX = 0, offsetY = 0) {
+  context.beginPath()
+  context.moveTo(points[0].x + offsetX, points[0].y + offsetY)
+  for (let index = 1; index < points.length; index += 1) {
+    context.lineTo(points[index].x + offsetX, points[index].y + offsetY)
+  }
+  context.closePath()
+}
 
 function smoothstep(edgeStart: number, edgeEnd: number, value: number) {
   const normalized = Math.min(1, Math.max(0, (value - edgeStart) / (edgeEnd - edgeStart)))
@@ -81,20 +123,9 @@ function prepareDragonImage(image: HTMLImageElement) {
       piece.height,
     )
 
-    if (index === 0) {
-      // Follow the far wing's actual outer silhouette so its two pointed sections stay together.
+    if (index < wingMasks.length) {
       pieceContext.globalCompositeOperation = 'destination-in'
-      pieceContext.beginPath()
-      pieceContext.moveTo(0, 0)
-      pieceContext.lineTo(476, 0)
-      pieceContext.lineTo(476, 210)
-      pieceContext.lineTo(400, 210)
-      pieceContext.lineTo(330, 190)
-      pieceContext.lineTo(270, 185)
-      pieceContext.lineTo(190, 210)
-      pieceContext.lineTo(20, 340)
-      pieceContext.lineTo(0, 350)
-      pieceContext.closePath()
+      tracePolygon(pieceContext, wingMasks[index], -piece.sourceX, -piece.sourceY)
       pieceContext.fillStyle = '#fff'
       pieceContext.fill()
     }
@@ -103,28 +134,12 @@ function prepareDragonImage(image: HTMLImageElement) {
   })
 
   dragonPieces.forEach((piece, index) => {
-    if (index === 0) {
-      // Remove the inner portion while retaining a narrow overlap along the structural joint.
+    if (index < wingMasks.length) {
       bodyContext.save()
-      bodyContext.beginPath()
-      bodyContext.moveTo(0, 0)
-      bodyContext.lineTo(452, 0)
-      bodyContext.lineTo(452, 190)
-      bodyContext.lineTo(390, 190)
-      bodyContext.lineTo(325, 175)
-      bodyContext.lineTo(265, 170)
-      bodyContext.lineTo(185, 195)
-      bodyContext.lineTo(20, 340)
-      bodyContext.lineTo(0, 350)
-      bodyContext.closePath()
+      tracePolygon(bodyContext, bodyWingMasks[index])
       bodyContext.clip()
-      bodyContext.clearRect(0, 0, piece.width, piece.height)
+      bodyContext.clearRect(piece.sourceX, piece.sourceY, piece.width, piece.height)
       bodyContext.restore()
-      return
-    }
-    if (index === 1) {
-      // This wing reaches the image's outer edge; retain overlap only along its inner joint.
-      bodyContext.clearRect(piece.sourceX + 26, piece.sourceY, piece.width - 26, piece.height)
       return
     }
     bodyContext.clearRect(piece.sourceX, piece.sourceY, piece.width, piece.height)
