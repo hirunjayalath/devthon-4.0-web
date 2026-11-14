@@ -1,4 +1,8 @@
-import { DragonScene } from './DragonScene'
+import { lazy, Suspense } from 'react'
+import guardianFallbackUrl from './assets/dragon/devthon-dragon-sprites.png'
+import { triggerGuardianFire } from './guardianEvents'
+
+const DragonScene = lazy(() => import('./DragonScene').then((module) => ({ default: module.DragonScene })))
 
 export function HeroSection({ onRegister }: { onRegister: () => void }) {
   return (
@@ -9,11 +13,27 @@ export function HeroSection({ onRegister }: { onRegister: () => void }) {
           <h1 className="max-w-4xl text-5xl font-black leading-[0.95] tracking-tight md:text-8xl">Design your dreams <span className="text-orange-500">into reality.</span></h1>
           <p className="mt-7 max-w-2xl text-lg leading-8 text-orange-100/65">DEV{'{thon}'} 4.0 is a practical platform for school and university developers to learn, collaborate and build meaningful web solutions.</p>
           <div className="mt-9 flex flex-wrap gap-4">
-            <button onClick={onRegister} className="bg-orange-600 px-7 py-3.5 font-bold transition-colors hover:bg-orange-500">Register now</button>
+            <button
+              onClick={onRegister}
+              onFocus={triggerGuardianFire}
+              onMouseEnter={triggerGuardianFire}
+              onPointerDown={triggerGuardianFire}
+              className="bg-orange-600 px-7 py-3.5 font-bold transition-colors hover:bg-orange-500"
+            >
+              Register now
+            </button>
             <a href="#about" className="border border-orange-300/30 px-7 py-3.5 font-bold text-orange-100 transition-colors hover:border-orange-400/60">Explore event</a>
           </div>
         </div>
-        <DragonScene />
+        <Suspense
+          fallback={(
+            <div className="relative h-[360px] w-full sm:h-[440px] lg:-ml-12 lg:h-[620px] lg:w-[calc(100%+6rem)]">
+              <img src={guardianFallbackUrl} alt="Mechanical DEVthon dragon" className="absolute inset-0 h-full w-full object-contain object-center" />
+            </div>
+          )}
+        >
+          <DragonScene />
+        </Suspense>
       </div>
     </section>
   )

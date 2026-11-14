@@ -5,6 +5,7 @@ import { HeroSection } from './HeroSection'
 import { LoadingScreen } from './LoadingScreen'
 import { RegistrationPage } from './RegistrationPage'
 import { AboutSection, CategoryOverview, ContactSection, Footer, OrganizersSection } from './StaticSections'
+import { triggerGuardianFire } from './guardianEvents'
 
 function goToRegistration() {
   window.location.hash = 'register'
@@ -23,9 +24,9 @@ function Navigation({ onRegister }: { onRegister: () => void }) {
           <a className="transition hover:text-white" href="#prizes">Prizes</a>
           <a className="transition hover:text-white" href="#gallery">Gallery</a>
           <a className="transition hover:text-white" href="#organizers">Organizers</a>
-          <button onClick={onRegister} className="bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
+          <button onClick={onRegister} onFocus={triggerGuardianFire} onMouseEnter={triggerGuardianFire} onPointerDown={triggerGuardianFire} className="bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
         </div>
-        <button onClick={onRegister} className="bg-orange-600 px-4 py-2 text-sm font-bold md:hidden">Register</button>
+        <button onClick={onRegister} onPointerDown={triggerGuardianFire} className="bg-orange-600 px-4 py-2 text-sm font-bold md:hidden">Register</button>
       </div>
     </nav>
   )
