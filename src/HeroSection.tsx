@@ -1,8 +1,7 @@
 import { lazy, Suspense } from 'react'
-import guardianFallbackUrl from './assets/dragon/devthon-dragon-sprites.png'
-import { triggerGuardianFire } from './guardianEvents'
+import { triggerBuildSequence } from './heroExperienceEvents'
 
-const DragonScene = lazy(() => import('./DragonScene').then((module) => ({ default: module.DragonScene })))
+const HeroBuildScene = lazy(() => import('./HeroBuildScene').then((module) => ({ default: module.HeroBuildScene })))
 
 export function HeroSection({ onRegister }: { onRegister: () => void }) {
   return (
@@ -15,9 +14,9 @@ export function HeroSection({ onRegister }: { onRegister: () => void }) {
           <div className="mt-9 flex flex-wrap gap-4">
             <button
               onClick={onRegister}
-              onFocus={triggerGuardianFire}
-              onMouseEnter={triggerGuardianFire}
-              onPointerDown={triggerGuardianFire}
+              onFocus={triggerBuildSequence}
+              onMouseEnter={triggerBuildSequence}
+              onPointerDown={triggerBuildSequence}
               className="bg-orange-600 px-7 py-3.5 font-bold transition-colors hover:bg-orange-500"
             >
               Register now
@@ -27,12 +26,13 @@ export function HeroSection({ onRegister }: { onRegister: () => void }) {
         </div>
         <Suspense
           fallback={(
-            <div className="relative h-[360px] w-full sm:h-[440px] lg:-ml-12 lg:h-[620px] lg:w-[calc(100%+6rem)]">
-              <img src={guardianFallbackUrl} alt="Mechanical DEVthon dragon" className="absolute inset-0 h-full w-full object-contain object-center" />
+            <div className="relative h-[340px] w-full border border-orange-500/30 p-6 sm:h-[430px] lg:-ml-8 lg:h-[590px] lg:w-[calc(100%+4rem)]">
+              <div className="border-b border-orange-500/25 pb-3 font-mono text-xs font-bold tracking-[0.18em] text-orange-400">BUILD / TEST / SHIP</div>
+              <div className="mt-8 grid grid-cols-3 gap-3"><div className="h-24 border border-orange-300/15" /><div className="h-24 border border-orange-300/15" /><div className="h-24 border border-orange-300/15" /></div>
             </div>
           )}
         >
-          <DragonScene />
+          <HeroBuildScene />
         </Suspense>
       </div>
     </section>

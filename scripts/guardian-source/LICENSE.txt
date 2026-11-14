@@ -1,7 +1,0 @@
-Cethiel's Dragon 3D
-Source: https://opengameart.org/content/cethiels-dragon-3d
-License: CC0 1.0 Universal (Public Domain Dedication)
-
-The source mesh and armature are used as an anatomical and animation base for
-the DEV{thon} 4.0 guardian. The website applies its own bronze mechanical
-material, interaction logic and animation composition.
