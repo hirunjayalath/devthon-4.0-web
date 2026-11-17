@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { EventTimeline, PrizePool } from './EventSections'
+import { CursorBallField } from './CursorBallField'
 import { GallerySection } from './GallerySection'
 import { HeroSection } from './HeroSection'
 import { LoadingScreen } from './LoadingScreen'
@@ -105,6 +106,7 @@ function App() {
 
   return (
     <>
+      <CursorBallField />
       {loadingStage !== 'done' && <LoadingScreen isLeaving={loadingStage === 'leaving'} />}
       {page}
     </>

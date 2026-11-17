@@ -9,6 +9,15 @@ body { margin: 0; min-width: 320px; background: #111014; color: #ffffff; font-fa
 button, a { -webkit-tap-highlight-color: transparent; }
 body.is-loading { overflow: hidden; }
 
+.cursor-ball-field {
+  position: fixed;
+  inset: 0;
+  z-index: 35;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
+
 .code-frame {
   position: relative;
   border-left: 1px solid rgba(249, 115, 22, 0.42);
