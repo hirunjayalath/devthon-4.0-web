@@ -22,6 +22,8 @@ type RegistrationForm = {
 
 const createMember = (): MemberDetails => ({ name: '', email: '', whatsapp: '', nic: '' })
 const inputClass = 'mt-2 w-full border border-white/10 bg-[#111014] px-4 py-3 font-normal text-white outline-none transition focus:border-orange-500'
+const registrationEndpoint = (import.meta.env.VITE_REGISTRATION_ENDPOINT as string | undefined)
+  || 'https://script.google.com/macros/s/AKfycbxTFsb4jBsGUXOzEa3whB99XmNk8kUTBz37X5ZOHLs5yw1JAb5xuD-NgbK7U9QTk2487A/exec'
 
 function Field({ label, value, onChange, type = 'text', placeholder, autoComplete, pattern, title, required = true }: {
   label: string
@@ -91,6 +93,9 @@ function MemberFields({ heading, member, onChange, requireNic }: {
 export function RegistrationPage({ onBack }: { onBack: () => void }) {
   const [step, setStep] = useState(1)
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [registrationId, setRegistrationId] = useState('')
   const [form, setForm] = useState<RegistrationForm>({
     category: 'University',
     teamName: '',
@@ -120,14 +125,48 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
     }))
   }
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (step < reviewStep) {
       setStep((current) => current + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
-    setSubmitted(true)
+
+    if (!registrationEndpoint) {
+      setSubmitError('Registration storage is not connected yet. Please try again shortly.')
+      return
+    }
+
+    setSubmitting(true)
+    setSubmitError('')
+    try {
+      const response = await fetch(registrationEndpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({
+          source: 'devthon-4-registration-v1',
+          category: form.category,
+          teamName: form.teamName.trim(),
+          teamSize,
+          institution: form.institution.trim(),
+          leader: form.leader,
+          members: visibleMembers,
+        }),
+        redirect: 'follow',
+      })
+      const result = await response.json() as { success?: boolean; registrationId?: string; error?: string }
+      if (!response.ok || !result.success || !result.registrationId) {
+        throw new Error(result.error || 'Registration could not be saved')
+      }
+      setRegistrationId(result.registrationId)
+      setSubmitted(true)
+    } catch (error) {
+      console.error(error)
+      setSubmitError('We could not save your registration. Please check your connection and try again.')
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const goBack = () => {
@@ -147,9 +186,10 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
 
         {submitted ? (
           <div className="mt-12 border border-orange-400/30 bg-orange-500/10 p-8">
-            <p className="text-sm font-black uppercase tracking-[0.22em] text-orange-400">Registration preview complete</p>
-            <h2 className="mt-4 text-2xl font-black">Registration received for preview</h2>
-            <p className="mt-3 text-base leading-7 text-orange-100/65">The full 3.0-style registration flow is working. No information has been sent to a database yet.</p>
+            <p className="text-sm font-black uppercase tracking-[0.22em] text-orange-400">Registration complete</p>
+            <h2 className="mt-4 text-2xl font-black">Your team is registered</h2>
+            <p className="mt-3 text-base leading-7 text-orange-100/65">Your information has been securely saved for the DEV{'{thon}'} 4.0 organizing team.</p>
+            <p className="mt-4 border border-orange-300/20 bg-[#111014] px-4 py-3 font-mono text-sm text-orange-300">Registration ID: {registrationId}</p>
             <button onClick={onBack} className="mt-6 bg-orange-600 px-6 py-3 font-bold hover:bg-orange-500">Return home</button>
           </div>
         ) : (
@@ -255,8 +295,9 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
 
             <div className="mt-8 flex flex-wrap gap-3">
               {step > 1 && <button type="button" onClick={goBack} className="border border-white/15 px-6 py-3 font-bold text-orange-100/75 hover:border-orange-400 hover:text-white">Previous</button>}
-              <button type="submit" className="bg-orange-600 px-6 py-3 font-bold hover:bg-orange-500">{step < reviewStep ? 'Continue' : 'Submit preview registration'}</button>
+              <button type="submit" disabled={submitting} className="bg-orange-600 px-6 py-3 font-bold hover:bg-orange-500 disabled:cursor-wait disabled:opacity-60">{step < reviewStep ? 'Continue' : submitting ? 'Saving registration…' : 'Submit registration'}</button>
             </div>
+            {submitError && <p role="alert" className="mt-4 border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-200">{submitError}</p>}
           </form>
         )}
       </div>
