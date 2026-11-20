@@ -184,8 +184,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
           <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
 
-        <div className="mx-auto max-w-6xl">
-          <div className="grid gap-6 sm:grid-cols-2">
+        <div className="mx-auto max-w-4xl">
+          <div className="grid gap-5 sm:grid-cols-2">
             {contacts.map((contact, index) => (
               <article
                 key={contact.name}
@@ -207,7 +207,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                 aria-label={`Show contact details for ${contact.name}`}
                 className="group relative cursor-pointer overflow-hidden bg-[#111014] outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px]"
               >
-                <div className="relative aspect-[4/5] overflow-hidden">
+                <div className="relative aspect-square overflow-hidden">
                   <img
                     src={contact.photo}
                     alt={contact.name}
