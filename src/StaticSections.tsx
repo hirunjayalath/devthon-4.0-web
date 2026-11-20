@@ -143,7 +143,6 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'karunarathnahiruna2002@gmail.com',
       photo: hirunaKarunarathna,
       photoPosition: 'center top',
-      photoBackground: '#ffffff',
     },
     {
       name: 'Leo Pasan Amarakoon',
@@ -154,7 +153,6 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'amarakoonpasan1@gmail.com',
       photo: pasanAmarakoon,
       photoPosition: 'center top',
-      photoBackground: '#604833',
     },
     {
       name: 'Leo Malshi Welikala',
@@ -165,7 +163,6 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'malshiwelikala@gmail.com',
       photo: malshiWelikala,
       photoPosition: 'center top',
-      photoBackground: '#ffffff',
     },
     {
       name: 'Leo Hirun Jayalath',
@@ -176,7 +173,6 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'hirunjayalath24@gmail.com',
       photo: hirunJayalath,
       photoPosition: 'center top',
-      photoBackground: '#d9dddd',
     },
   ]
   return (
@@ -189,7 +185,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
         </div>
 
         <div className="mx-auto max-w-6xl">
-          <div className="grid border-l border-t border-orange-300/15 sm:grid-cols-2">
+          <div className="grid gap-6 sm:grid-cols-2">
             {contacts.map((contact, index) => (
               <article
                 key={contact.name}
@@ -209,16 +205,18 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                   }
                 }}
                 aria-label={`Show contact details for ${contact.name}`}
-                className="group relative h-[30rem] cursor-pointer overflow-hidden border-b border-r border-orange-300/15 outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-[34rem]"
+                className="group relative cursor-pointer overflow-hidden bg-[#111014] outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px]"
               >
-                <div className="absolute inset-x-0 top-0 bottom-[7.5rem]" style={{ backgroundColor: contact.photoBackground }}>
+                <div className="relative aspect-[4/5] overflow-hidden">
                   <img
                     src={contact.photo}
                     alt={contact.name}
-                    className="h-full w-full object-contain"
+                    className="absolute inset-0 h-full w-full object-cover"
                     style={{ objectPosition: contact.photoPosition }}
                   />
                 </div>
+
+                <div className="h-[7.5rem]" aria-hidden="true" />
 
                 <div className={`absolute left-0 top-0 h-0.5 bg-orange-500 transition-[width] duration-300 ${activeContact === index ? 'w-full' : 'w-0'}`} />
 
