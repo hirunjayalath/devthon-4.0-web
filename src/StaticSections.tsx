@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { ReactNode } from 'react'
 import hirunJayalath from './assets/contacts/hirun-jayalath.png'
 import hirunaKarunarathna from './assets/contacts/hiruna-karunarathna.png'
+import malshiWelikala from './assets/contacts/malshi-welikala.png'
 import pasanAmarakoon from './assets/contacts/pasan-amarakoon.png'
 import leoSltcLogo from './assets/organizers/leo-sltc.jpeg'
 import leoUomLogo from './assets/organizers/leo-uom.png'
@@ -155,6 +156,16 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       photoTransform: 'translateX(-18%) scale(1.4)',
     },
     {
+      name: 'Leo Malshi Welikala',
+      position: 'Activity Coordinator',
+      club: 'Leo Club of University of Moratuwa',
+      phone: '074 349 3216',
+      phoneHref: '+94743493216',
+      email: 'malshiwelikala@gmail.com',
+      photo: malshiWelikala,
+      photoPosition: 'center top',
+    },
+    {
       name: 'Leo Hirun Jayalath',
       position: 'Director of Web & PR',
       club: 'Leo Club of University of Moratuwa',
@@ -175,7 +186,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
         </div>
 
         <div className="mx-auto max-w-6xl">
-          <div className="flex flex-col border-t border-orange-300/15 lg:h-[30rem] lg:flex-row">
+          <div className="grid border-l border-t border-orange-300/15 sm:grid-cols-2">
             {contacts.map((contact, index) => (
               <article
                 key={contact.name}
@@ -195,7 +206,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                   }
                 }}
                 aria-label={`Show contact details for ${contact.name}`}
-                className="group relative h-[25rem] cursor-pointer overflow-hidden border-b border-orange-300/15 outline-none last:border-b-0 focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-full lg:flex-1 lg:border-b-0 lg:border-r lg:last:border-r-0"
+                className="group relative h-[24rem] cursor-pointer overflow-hidden border-b border-r border-orange-300/15 outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-[27rem]"
               >
                 <img
                   src={contact.photo}
