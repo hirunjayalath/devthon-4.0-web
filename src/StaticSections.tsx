@@ -180,7 +180,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-2xl">
           <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Contact us</p>
-          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Organizing team</h2>
+          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Organizing Team</h2>
           <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
 
