@@ -5,14 +5,34 @@ import { GallerySection } from './GallerySection'
 import { HeroSection } from './HeroSection'
 import { LoadingScreen } from './LoadingScreen'
 import { RegistrationPage } from './RegistrationPage'
+import { SubmissionPage } from './SubmissionPage'
 import { AboutSection, CategoryOverview, ContactSection, Footer, OrganizersSection } from './StaticSections'
 import { triggerBuildSequence } from './heroExperienceEvents'
+import { SUBMISSION_WINDOWS } from './submissionSchedule'
+import type { SubmissionKey } from './submissionSchedule'
+
+type PageView = 'home' | 'registration' | 'submission'
+
+function getPageView(): PageView {
+  if (window.location.hash === '#register') return 'registration'
+  if (window.location.hash.startsWith('#submit')) return 'submission'
+  return 'home'
+}
+
+function getSubmissionKeyFromHash(): SubmissionKey | null {
+  const key = window.location.hash.replace('#submit/', '') as SubmissionKey
+  return Object.hasOwn(SUBMISSION_WINDOWS, key) ? key : null
+}
 
 function goToRegistration() {
   window.location.hash = 'register'
 }
 
-function Navigation({ onRegister }: { onRegister: () => void }) {
+function goToSubmissions(key?: SubmissionKey) {
+  window.location.hash = key ? `submit/${key}` : 'submit'
+}
+
+function Navigation({ onRegister, onSubmit }: { onRegister: () => void; onSubmit: () => void }) {
   return (
     <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#111014]/90 px-6 py-4 backdrop-blur md:px-12">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
@@ -25,23 +45,27 @@ function Navigation({ onRegister }: { onRegister: () => void }) {
           <a className="transition hover:text-white" href="#prizes">Prizes</a>
           <a className="transition hover:text-white" href="#gallery">Gallery</a>
           <a className="transition hover:text-white" href="#organizers">Organizers</a>
+          <button onClick={onSubmit} className="border border-orange-500 px-5 py-2 font-bold text-orange-200 transition hover:bg-orange-500 hover:text-white">Submissions</button>
           <button onClick={onRegister} onFocus={triggerBuildSequence} onMouseEnter={triggerBuildSequence} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
         </div>
-        <button onClick={onRegister} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-4 py-2 text-sm font-bold md:hidden">Register</button>
+        <div className="flex gap-2 md:hidden">
+          <button onClick={onSubmit} className="border border-orange-500 px-3 py-2 text-xs font-bold">Submit</button>
+          <button onClick={onRegister} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-3 py-2 text-xs font-bold">Register</button>
+        </div>
       </div>
     </nav>
   )
 }
 
-function HomePage({ onRegister }: { onRegister: () => void }) {
+function HomePage({ onRegister, onSubmit }: { onRegister: () => void; onSubmit: (key?: SubmissionKey) => void }) {
   return (
     <>
-      <Navigation onRegister={onRegister} />
+      <Navigation onRegister={onRegister} onSubmit={() => onSubmit()} />
       <main id="home">
         <HeroSection onRegister={onRegister} />
         <AboutSection />
         <CategoryOverview />
-        <EventTimeline />
+        <EventTimeline onSubmit={onSubmit} />
         <PrizePool />
         <GallerySection />
         <OrganizersSection />
@@ -53,7 +77,8 @@ function HomePage({ onRegister }: { onRegister: () => void }) {
 }
 
 function App() {
-  const [isRegistration, setIsRegistration] = useState(window.location.hash === '#register')
+  const [pageView, setPageView] = useState<PageView>(getPageView)
+  const [submissionKey, setSubmissionKey] = useState<SubmissionKey | null>(getSubmissionKeyFromHash)
   const [loadingStage, setLoadingStage] = useState<'active' | 'leaving' | 'done'>('active')
 
   useEffect(() => {
@@ -74,13 +99,16 @@ function App() {
   }, [loadingStage])
 
   useEffect(() => {
-    const onHashChange = () => setIsRegistration(window.location.hash === '#register')
+    const onHashChange = () => {
+      setPageView(getPageView())
+      setSubmissionKey(getSubmissionKeyFromHash())
+    }
     window.addEventListener('hashchange', onHashChange)
     return () => window.removeEventListener('hashchange', onHashChange)
   }, [])
 
   useEffect(() => {
-    if (isRegistration) return
+    if (pageView !== 'home') return
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -95,14 +123,18 @@ function App() {
     const sections = document.querySelectorAll('.reveal-on-scroll')
     sections.forEach((section) => observer.observe(section))
     return () => observer.disconnect()
-  }, [isRegistration])
+  }, [pageView])
 
   const goHome = () => {
     window.location.hash = 'home'
-    setIsRegistration(false)
+    setPageView('home')
   }
 
-  const page = isRegistration ? <RegistrationPage onBack={goHome} /> : <HomePage onRegister={goToRegistration} />
+  const page = pageView === 'registration'
+    ? <RegistrationPage onBack={goHome} />
+    : pageView === 'submission'
+      ? <SubmissionPage onBack={goHome} initialKey={submissionKey} />
+      : <HomePage onRegister={goToRegistration} onSubmit={goToSubmissions} />
 
   return (
     <>

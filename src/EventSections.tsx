@@ -1,21 +1,29 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { REGISTRATION_WINDOWS } from './registrationSchedule'
 import type { Category } from './registrationSchedule'
+import { getSubmissionWindowState, SUBMISSION_WINDOWS } from './submissionSchedule'
+import type { SubmissionKey } from './submissionSchedule'
 
 type TimelineItem = {
   stage: string
   date: string
   related?: string[]
+  submissionKey?: SubmissionKey
 }
 
 const timelineByCategory: Record<Category, TimelineItem[]> = {
   University: [
     { stage: 'Team Registration', date: REGISTRATION_WINDOWS.University.timelineLabel },
-    { stage: 'Proposal Submission', date: 'Dec 24 – Dec 31' },
+    {
+      stage: 'Proposal Submission',
+      date: SUBMISSION_WINDOWS['university-proposal'].timelineLabel,
+      submissionKey: 'university-proposal',
+    },
     {
       stage: 'UI/UX Submission',
-      date: 'Jan 13 – Jan 20',
+      date: SUBMISSION_WINDOWS['university-uiux'].timelineLabel,
       related: ['UI/UX Session · Jan 16'],
+      submissionKey: 'university-uiux',
     },
     {
       stage: 'Semi Finals',
@@ -32,8 +40,9 @@ const timelineByCategory: Record<Category, TimelineItem[]> = {
     },
     {
       stage: 'Proposal Submission',
-      date: 'Jan 05 – Jan 17',
+      date: SUBMISSION_WINDOWS['school-proposal'].timelineLabel,
       related: ['Proposal Creation Workshop · Date to be announced'],
+      submissionKey: 'school-proposal',
     },
     {
       stage: 'Semi Finals',
@@ -88,9 +97,15 @@ function CategoryTabs({ active, onChange }: { active: Category; onChange: (categ
   )
 }
 
-export function EventTimeline() {
+export function EventTimeline({ onSubmit }: { onSubmit: (key: SubmissionKey) => void }) {
   const [category, setCategory] = useState<Category>('School')
+  const [now, setNow] = useState(() => Date.now())
   const items = timelineByCategory[category]
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 30_000)
+    return () => window.clearInterval(timer)
+  }, [])
 
   return (
     <section id="timeline" className="reveal-on-scroll bg-[#171419] px-6 py-24 md:px-12">
@@ -107,6 +122,7 @@ export function EventTimeline() {
           <div className="absolute bottom-0 left-5 top-0 w-px bg-orange-500/50 md:left-1/2" />
           {items.map((item, index) => {
             const isLeft = index % 2 === 0
+            const submissionState = item.submissionKey ? getSubmissionWindowState(item.submissionKey, now) : null
             return (
               <div
                 key={`${category}-${item.stage}`}
@@ -127,6 +143,21 @@ export function EventTimeline() {
                   {item.related?.map((detail) => (
                     <p key={detail} className="mt-4 border border-orange-300/10 px-4 py-3 text-xs leading-5 text-orange-100/55"><span className="text-orange-400">session: </span>{detail}</p>
                   ))}
+                  {item.submissionKey && submissionState && (
+                    <div className="mt-5 border-t border-orange-300/10 pt-5">
+                      <p className={`text-xs font-black uppercase tracking-[0.15em] ${submissionState.isOpen ? 'text-emerald-400' : 'text-orange-100/40'}`}>
+                        {submissionState.statusLabel}
+                      </p>
+                      <button
+                        type="button"
+                        disabled={!submissionState.isOpen}
+                        onClick={() => onSubmit(item.submissionKey as SubmissionKey)}
+                        className="mt-3 w-full bg-orange-600 px-4 py-3 text-sm font-bold text-white transition hover:bg-orange-500 disabled:cursor-not-allowed disabled:bg-orange-900/45 disabled:text-orange-100/35"
+                      >
+                        {submissionState.isOpen ? `Submit ${SUBMISSION_WINDOWS[item.submissionKey].type}` : `${SUBMISSION_WINDOWS[item.submissionKey].type} submission ${submissionState.statusLabel.toLowerCase()}`}
+                      </button>
+                    </div>
+                  )}
                 </article>
               </div>
             )
