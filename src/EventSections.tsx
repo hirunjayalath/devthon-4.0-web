@@ -119,7 +119,9 @@ export function EventTimeline({ onSubmit }: { onSubmit: (key: SubmissionKey) => 
         <CategoryTabs active={category} onChange={setCategory} />
 
         <div className="relative mx-auto max-w-5xl">
-          <div className="absolute bottom-0 left-5 top-0 w-px bg-orange-500/50 md:left-1/2" />
+          <div className="timeline-spine" aria-hidden="true">
+            <span className="timeline-spine__runner" />
+          </div>
           {items.map((item, index) => {
             const isLeft = index % 2 === 0
             const submissionState = item.submissionKey ? getSubmissionWindowState(item.submissionKey, now) : null
