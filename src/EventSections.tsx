@@ -151,7 +151,7 @@ export function PrizePool() {
 
         <CategoryTabs active={category} onChange={setCategory} />
 
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2">
           {prize.placements.map((placement, index) => (
             <article
               key={placement.title}
@@ -159,7 +159,7 @@ export function PrizePool() {
                 index === 0
                   ? 'border-orange-400/40 bg-[#171419]'
                   : 'border-orange-300/10 bg-[#171419]'
-              } ${index === 1 ? 'md:mt-6' : index === 2 ? 'md:mt-12' : ''}`}
+              } ${index === 0 ? 'md:col-span-2 md:mx-auto md:w-[calc(50%-0.625rem)]' : ''}`}
             >
               <p className="code-key text-left">rank[{index}]</p>
               <h3 className="mt-5 text-xl font-black">{placement.title}</h3>
