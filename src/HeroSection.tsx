@@ -1,9 +1,14 @@
+import { useRef } from 'react'
+import { DragonGuardian } from './DragonGuardian'
 import { triggerBuildSequence } from './heroExperienceEvents'
 
 export function HeroSection({ onRegister }: { onRegister: () => void }) {
+  const heroRef = useRef<HTMLElement>(null)
+
   return (
-    <section className="relative isolate overflow-hidden px-6 py-16 md:px-12">
-      <div className="mx-auto flex max-w-[90rem] justify-center">
+    <section ref={heroRef} className="relative isolate overflow-hidden px-6 py-16 md:px-12">
+      <DragonGuardian hostRef={heroRef} />
+      <div className="relative z-10 mx-auto flex max-w-[90rem] justify-center">
         <div className="code-frame hero-code-frame w-full min-w-0 max-w-5xl text-center" data-code-file="hero.tsx">
           <p className="code-comment mb-5 font-bold uppercase tracking-[0.26em] text-orange-400">Web development competition</p>
           <h1 className="text-[clamp(1.4rem,7vw,5.7rem)] font-black leading-[0.95] tracking-tight">
