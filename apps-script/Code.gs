@@ -163,6 +163,45 @@ function getOrCreateFolder(parent, name) {
   return folders.hasNext() ? folders.next() : parent.createFolder(name);
 }
 
+function initializeSubmissionStorage() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  let sheet = spreadsheet.getSheetByName(SUBMISSIONS_SHEET_NAME);
+  if (!sheet) {
+    sheet = spreadsheet.insertSheet(SUBMISSIONS_SHEET_NAME);
+    sheet.appendRow([
+      'Submitted at',
+      'Submission ID',
+      'Registration ID',
+      'Category',
+      'Stage',
+      'Team name',
+      'Leader email',
+      'Original file name',
+      'File type',
+      'File size',
+      'Drive file ID',
+      'Drive URL',
+    ]);
+    sheet.setFrozenRows(1);
+  }
+
+  const rootFolders = DriveApp.getFoldersByName(SUBMISSIONS_FOLDER_NAME);
+  const rootFolder = rootFolders.hasNext() ? rootFolders.next() : DriveApp.createFolder(SUBMISSIONS_FOLDER_NAME);
+  const universityFolder = getOrCreateFolder(rootFolder, 'University');
+  const schoolFolder = getOrCreateFolder(rootFolder, 'School');
+  getOrCreateFolder(universityFolder, 'Proposal');
+  getOrCreateFolder(universityFolder, 'UI-UX');
+  getOrCreateFolder(schoolFolder, 'Proposal');
+
+  const result = {
+    folderId: rootFolder.getId(),
+    folderUrl: rootFolder.getUrl(),
+    spreadsheetUrl: spreadsheet.getUrl(),
+  };
+  console.log(JSON.stringify(result));
+  return result;
+}
+
 function saveSubmission(data, now) {
   const submission = validateSubmission(data, now);
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
