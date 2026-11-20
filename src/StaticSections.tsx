@@ -143,6 +143,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'karunarathnahiruna2002@gmail.com',
       photo: hirunaKarunarathna,
       photoPosition: 'center top',
+      photoBackground: '#ffffff',
     },
     {
       name: 'Leo Pasan Amarakoon',
@@ -152,8 +153,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       phoneHref: '+94703242440',
       email: 'amarakoonpasan1@gmail.com',
       photo: pasanAmarakoon,
-      photoPosition: 'center 18%',
-      photoTransform: 'translateX(-18%) scale(1.4)',
+      photoPosition: 'center top',
+      photoBackground: '#604833',
     },
     {
       name: 'Leo Malshi Welikala',
@@ -164,6 +165,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'malshiwelikala@gmail.com',
       photo: malshiWelikala,
       photoPosition: 'center top',
+      photoBackground: '#ffffff',
     },
     {
       name: 'Leo Hirun Jayalath',
@@ -173,7 +175,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       phoneHref: '+94769155953',
       email: 'hirunjayalath24@gmail.com',
       photo: hirunJayalath,
-      photoPosition: 'center 26%',
+      photoPosition: 'center top',
+      photoBackground: '#d9dddd',
     },
   ]
   return (
@@ -206,14 +209,16 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                   }
                 }}
                 aria-label={`Show contact details for ${contact.name}`}
-                className="group relative h-[24rem] cursor-pointer overflow-hidden border-b border-r border-orange-300/15 outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-[27rem]"
+                className="group relative h-[30rem] cursor-pointer overflow-hidden border-b border-r border-orange-300/15 outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px] lg:h-[34rem]"
               >
-                <img
-                  src={contact.photo}
-                  alt={contact.name}
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: contact.photoPosition, transform: contact.photoTransform }}
-                />
+                <div className="absolute inset-x-0 top-0 bottom-[7.5rem]" style={{ backgroundColor: contact.photoBackground }}>
+                  <img
+                    src={contact.photo}
+                    alt={contact.name}
+                    className="h-full w-full object-contain"
+                    style={{ objectPosition: contact.photoPosition }}
+                  />
+                </div>
 
                 <div className={`absolute left-0 top-0 h-0.5 bg-orange-500 transition-[width] duration-300 ${activeContact === index ? 'w-full' : 'w-0'}`} />
 
