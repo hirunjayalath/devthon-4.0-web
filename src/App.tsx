@@ -62,7 +62,7 @@ function HomePage({ onRegister, onSubmit }: { onRegister: () => void; onSubmit: 
     <>
       <Navigation onRegister={onRegister} onSubmit={() => onSubmit()} />
       <main id="home">
-        <HeroSection onRegister={onRegister} />
+        <HeroSection onRegister={onRegister} onSubmit={() => onSubmit()} />
         <AboutSection />
         <CategoryOverview />
         <EventTimeline onSubmit={onSubmit} />

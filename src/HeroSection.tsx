@@ -1,7 +1,7 @@
 import { DragonGuardian } from './DragonGuardian'
 import { triggerBuildSequence } from './heroExperienceEvents'
 
-export function HeroSection({ onRegister }: { onRegister: () => void }) {
+export function HeroSection({ onRegister, onSubmit }: { onRegister: () => void; onSubmit: () => void }) {
   return (
     <section className="relative isolate overflow-hidden px-6 py-16 md:px-12">
       <DragonGuardian />
@@ -22,6 +22,13 @@ export function HeroSection({ onRegister }: { onRegister: () => void }) {
               className="bg-orange-600 px-7 py-3.5 font-bold transition-colors hover:bg-orange-500"
             >
               Register now
+            </button>
+            <button
+              type="button"
+              onClick={onSubmit}
+              className="border border-orange-500 px-7 py-3.5 font-bold text-orange-200 transition-colors hover:bg-orange-500 hover:text-white"
+            >
+              Submissions
             </button>
             <a href="#about" className="border border-orange-300/30 px-7 py-3.5 font-bold text-orange-100 transition-colors hover:border-orange-400/60">Explore event</a>
           </div>
