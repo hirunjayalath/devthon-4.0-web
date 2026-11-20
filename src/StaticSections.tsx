@@ -1,11 +1,12 @@
 import { useState } from 'react'
+import type { ReactNode } from 'react'
 import hirunJayalath from './assets/contacts/hirun-jayalath.png'
 import hirunaKarunarathna from './assets/contacts/hiruna-karunarathna.png'
 import pasanAmarakoon from './assets/contacts/pasan-amarakoon.png'
 import leoSltcLogo from './assets/organizers/leo-sltc.jpeg'
 import leoUomLogo from './assets/organizers/leo-uom.png'
 
-function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: string; text: string }) {
+function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: ReactNode; text: string }) {
   return (
     <div className="mb-10 max-w-2xl">
       <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">{eyebrow}</p>
@@ -42,14 +43,18 @@ export function AboutSection() {
 
 export function CategoryOverview() {
   const categories = [
-    ['School category', 'A friendly starting point for students who want to explore proposals, design and web development foundations.'],
-    ['University category', 'A deeper build journey for university and institute teams solving real problems with full-stack web skills.'],
+    ['School Category', 'A friendly starting point for students who want to explore proposals, design and web development foundations.'],
+    ['University Category', 'A deeper build journey for university and institute teams solving real problems with full-stack web skills.'],
   ]
 
   return (
     <section className="reveal-on-scroll px-6 py-24 md:px-12">
       <div className="mx-auto max-w-7xl">
-        <SectionTitle eyebrow="Choose your track" title="Two categories. One shared ambition." text="The final eligibility rules, team sizes and submission requirements will be added once confirmed by the organizing committee." />
+        <SectionTitle
+          eyebrow="Choose your track"
+          title={<><span className="block">Two categories</span><span className="block">One shared ambition</span></>}
+          text="The final eligibility rules, team sizes and submission requirements will be added once confirmed by the organizing committee."
+        />
         <div className="grid gap-6 md:grid-cols-2">
           {categories.map(([title, copy], index) => (
             <article key={title} className="border border-orange-300/15 bg-[#111014] p-8">

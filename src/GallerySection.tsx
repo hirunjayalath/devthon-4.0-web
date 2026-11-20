@@ -95,7 +95,10 @@ export function GallerySection() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-16 max-w-2xl">
           <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-white/60">Gallery</p>
-          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Three editions. One growing story.</h2>
+          <h2 className="text-3xl font-black tracking-tight md:text-5xl">
+            <span className="block">Three editions</span>
+            <span className="block">One growing story</span>
+          </h2>
         </div>
 
         <div className="space-y-20">

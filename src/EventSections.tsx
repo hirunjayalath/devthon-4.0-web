@@ -97,7 +97,7 @@ export function EventTimeline() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-8 max-w-2xl">
           <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Mark your calendar</p>
-          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Competition timeline</h2>
+          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Competition Timeline</h2>
           <p className="mt-4 leading-7 text-orange-100/60">Switch between the two categories to see every competition stage, workshop and finale date.</p>
         </div>
 
@@ -159,7 +159,7 @@ export function PrizePool() {
                 index === 0
                   ? 'border-orange-400/40 bg-[#171419]'
                   : 'border-orange-300/10 bg-[#171419]'
-              }`}
+              } ${index === 1 ? 'md:mt-6' : index === 2 ? 'md:mt-12' : ''}`}
             >
               <p className="code-key text-left">rank[{index}]</p>
               <h3 className="mt-5 text-xl font-black">{placement.title}</h3>
