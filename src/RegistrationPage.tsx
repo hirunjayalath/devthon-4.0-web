@@ -238,18 +238,6 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
           </div>
         ) : (
           <form onSubmit={submit} className="mt-10 border border-orange-300/15 bg-[#171419] p-6 md:p-8">
-            <div
-              role="status"
-              className={`mb-8 border p-5 ${registrationState.isOpen ? 'border-emerald-400/35 bg-emerald-500/10' : 'border-orange-400/30 bg-orange-500/10'}`}
-            >
-              <div className="flex items-center gap-3">
-                <RegistrationLockIcon unlocked={registrationState.isOpen} />
-                <p className="font-black">{form.category} registration · {registrationState.statusLabel}</p>
-              </div>
-              <p className="mt-2 text-sm leading-6 text-orange-100/65">{registrationState.message}</p>
-              <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-orange-100/40">Sri Lanka time · UTC+5:30</p>
-            </div>
-
             <div className="mb-8">
               <div className="flex gap-2" aria-hidden="true">
                 {Array.from({ length: reviewStep }, (_, index) => (
