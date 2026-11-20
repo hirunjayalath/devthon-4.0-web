@@ -24,6 +24,10 @@ const createMember = (): MemberDetails => ({ name: '', email: '', whatsapp: '', 
 const inputClass = 'mt-2 w-full border border-white/10 bg-[#111014] px-4 py-3 font-normal text-white outline-none transition focus:border-orange-500'
 const registrationEndpoint = (import.meta.env.VITE_REGISTRATION_ENDPOINT as string | undefined)
   || 'https://script.google.com/macros/s/AKfycbxTFsb4jBsGUXOzEa3whB99XmNk8kUTBz37X5ZOHLs5yw1JAb5xuD-NgbK7U9QTk2487A/exec'
+const whatsappGroupByCategory: Record<Category, string> = {
+  School: 'https://chat.whatsapp.com/KGt36cRCNjr5Bil011CaTG?s=cl&p=a&iam=2',
+  University: 'https://chat.whatsapp.com/IVZeeVAL7QZ3Chx2qqAWPV?s=cl&p=a&iam=2',
+}
 
 function Field({ label, value, onChange, type = 'text', placeholder, autoComplete, pattern, title, required = true }: {
   label: string
@@ -190,7 +194,22 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
             <h2 className="mt-4 text-2xl font-black">Your team is registered</h2>
             <p className="mt-3 text-base leading-7 text-orange-100/65">Your information has been securely saved for the DEV{'{thon}'} 4.0 organizing team.</p>
             <p className="mt-4 border border-orange-300/20 bg-[#111014] px-4 py-3 font-mono text-sm text-orange-300">Registration ID: {registrationId}</p>
-            <button onClick={onBack} className="mt-6 bg-orange-600 px-6 py-3 font-bold hover:bg-orange-500">Return home</button>
+            <div className="mt-6 border border-[#25D366]/35 bg-[#25D366]/10 p-5">
+              <p className="font-black text-white">Join your {form.category.toLowerCase()} category WhatsApp group</p>
+              <p className="mt-2 text-sm leading-6 text-orange-100/65">Get important competition announcements, reminders and updates from the organizing team.</p>
+              <a
+                href={whatsappGroupByCategory[form.category]}
+                target="_blank"
+                rel="noreferrer"
+                className="mt-4 inline-flex items-center gap-3 bg-[#25D366] px-5 py-3 font-black text-[#07170d] transition hover:bg-[#38e477] focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 focus:ring-offset-[#20191b]"
+              >
+                <svg aria-hidden="true" viewBox="0 0 32 32" className="h-6 w-6 fill-current">
+                  <path d="M16.04 3A12.83 12.83 0 0 0 5.01 22.36L3.2 29l6.8-1.78A12.96 12.96 0 0 0 16.03 29h.01A13 13 0 0 0 16.04 3Zm0 23.8a10.74 10.74 0 0 1-5.48-1.5l-.39-.23-4.03 1.06 1.08-3.93-.25-.4a10.64 10.64 0 1 1 9.07 5Zm5.84-7.98c-.32-.16-1.9-.93-2.2-1.04-.29-.11-.5-.16-.72.16-.21.32-.82 1.04-1 1.25-.19.22-.38.24-.7.08-.32-.16-1.35-.5-2.57-1.58a9.66 9.66 0 0 1-1.78-2.22c-.18-.32-.02-.5.14-.66.14-.14.32-.37.48-.56.16-.18.21-.32.32-.53.1-.22.05-.4-.03-.56-.08-.16-.72-1.73-.98-2.37-.26-.62-.52-.54-.72-.55h-.61c-.21 0-.56.08-.85.4-.3.32-1.12 1.1-1.12 2.66 0 1.57 1.15 3.09 1.31 3.3.16.21 2.25 3.43 5.45 4.81.76.33 1.36.52 1.82.67.76.24 1.46.21 2 .13.62-.09 1.9-.77 2.17-1.52.27-.75.27-1.4.19-1.53-.08-.13-.3-.21-.62-.37Z" />
+                </svg>
+                Join {form.category} WhatsApp group
+              </a>
+            </div>
+            <button onClick={onBack} className="mt-6 border border-orange-300/30 px-6 py-3 font-bold text-orange-100 hover:border-orange-400 hover:text-white">Return home</button>
           </div>
         ) : (
           <form onSubmit={submit} className="mt-10 border border-orange-300/15 bg-[#171419] p-6 md:p-8">
