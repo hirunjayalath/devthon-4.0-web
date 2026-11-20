@@ -225,7 +225,7 @@ export function SubmissionPage({
             </form>
           ) : (
             <div className="py-8">
-              <p className="max-w-2xl leading-7 text-orange-100/60">{state.message} This form will unlock automatically according to the competition timeline.</p>
+              <p className="max-w-2xl leading-7 text-orange-100/60">{state.message}</p>
             </div>
           )}
 
