@@ -1,6 +1,9 @@
 const SPREADSHEET_ID = '1aLmYZzkaD0zQbKrj2lktFjuaSB_ninzDGzIHeowfotM';
 const SHEET_NAME = 'Registrations';
-const SUBMISSIONS_SHEET_NAME = 'Submissions';
+const SUBMISSIONS_SHEET_NAMES = {
+  University: 'University Submissions',
+  School: 'School Submissions',
+};
 const SUBMISSIONS_FOLDER_NAME = 'DEVthon 4.0 Submissions';
 const EXPECTED_REGISTRATION_SOURCE = 'devthon-4-registration-v1';
 const EXPECTED_SUBMISSION_SOURCE = 'devthon-4-submission-v1';
@@ -163,11 +166,13 @@ function getOrCreateFolder(parent, name) {
   return folders.hasNext() ? folders.next() : parent.createFolder(name);
 }
 
-function initializeSubmissionStorage() {
-  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = spreadsheet.getSheetByName(SUBMISSIONS_SHEET_NAME);
+function getOrCreateSubmissionSheet(spreadsheet, category) {
+  const sheetName = SUBMISSIONS_SHEET_NAMES[category];
+  if (!sheetName) throw new Error('Invalid submission category.');
+
+  let sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) {
-    sheet = spreadsheet.insertSheet(SUBMISSIONS_SHEET_NAME);
+    sheet = spreadsheet.insertSheet(sheetName);
     sheet.appendRow([
       'Submitted at',
       'Submission ID',
@@ -184,6 +189,13 @@ function initializeSubmissionStorage() {
     ]);
     sheet.setFrozenRows(1);
   }
+  return sheet;
+}
+
+function initializeSubmissionStorage() {
+  const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  getOrCreateSubmissionSheet(spreadsheet, 'University');
+  getOrCreateSubmissionSheet(spreadsheet, 'School');
 
   const rootFolders = DriveApp.getFoldersByName(SUBMISSIONS_FOLDER_NAME);
   const rootFolder = rootFolders.hasNext() ? rootFolders.next() : DriveApp.createFolder(SUBMISSIONS_FOLDER_NAME);
@@ -205,24 +217,7 @@ function initializeSubmissionStorage() {
 function saveSubmission(data, now) {
   const submission = validateSubmission(data, now);
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
-  let sheet = spreadsheet.getSheetByName(SUBMISSIONS_SHEET_NAME);
-  if (!sheet) {
-    sheet = spreadsheet.insertSheet(SUBMISSIONS_SHEET_NAME);
-    sheet.appendRow([
-      'Submitted at',
-      'Submission ID',
-      'Registration ID',
-      'Category',
-      'Stage',
-      'Team name',
-      'Leader email',
-      'Original file name',
-      'File type',
-      'File size',
-      'Drive file ID',
-      'Drive URL',
-    ]);
-  }
+  const sheet = getOrCreateSubmissionSheet(spreadsheet, submission.category);
 
   const rootFolders = DriveApp.getFoldersByName(SUBMISSIONS_FOLDER_NAME);
   const rootFolder = rootFolders.hasNext() ? rootFolders.next() : DriveApp.createFolder(SUBMISSIONS_FOLDER_NAME);
