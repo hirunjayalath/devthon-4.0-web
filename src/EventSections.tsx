@@ -1,6 +1,6 @@
 import { useState } from 'react'
-
-type Category = 'School' | 'University'
+import { REGISTRATION_WINDOWS } from './registrationSchedule'
+import type { Category } from './registrationSchedule'
 
 type TimelineItem = {
   stage: string
@@ -10,7 +10,7 @@ type TimelineItem = {
 
 const timelineByCategory: Record<Category, TimelineItem[]> = {
   University: [
-    { stage: 'Team Registration', date: 'Dec 10 – Dec 17' },
+    { stage: 'Team Registration', date: REGISTRATION_WINDOWS.University.timelineLabel },
     { stage: 'Proposal Submission', date: 'Dec 24 – Dec 31' },
     {
       stage: 'UI/UX Submission',
@@ -27,7 +27,7 @@ const timelineByCategory: Record<Category, TimelineItem[]> = {
   School: [
     {
       stage: 'Team Registration',
-      date: 'Dec 15 – Dec 29',
+      date: REGISTRATION_WINDOWS.School.timelineLabel,
       related: ['Online Introductory Session · Date to be announced'],
     },
     {

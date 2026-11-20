@@ -1,7 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent, HTMLInputTypeAttribute } from 'react'
+import { getDefaultRegistrationCategory, getRegistrationWindowState } from './registrationSchedule'
+import type { Category } from './registrationSchedule'
 
-type Category = 'University' | 'School'
 type TeamSize = '' | '3' | '4' | '5'
 
 type MemberDetails = {
@@ -94,25 +95,41 @@ function MemberFields({ heading, member, onChange, requireNic }: {
   )
 }
 
+function RegistrationLockIcon({ unlocked }: { unlocked: boolean }) {
+  return (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 fill-none stroke-current" strokeWidth="1.8">
+      <rect x="5" y="10" width="14" height="10" />
+      {unlocked ? <path d="M8 10V7a4 4 0 0 1 7.5-2" /> : <path d="M8 10V7a4 4 0 0 1 8 0v3" />}
+    </svg>
+  )
+}
+
 export function RegistrationPage({ onBack }: { onBack: () => void }) {
+  const [now, setNow] = useState(() => Date.now())
   const [step, setStep] = useState(1)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const [registrationId, setRegistrationId] = useState('')
-  const [form, setForm] = useState<RegistrationForm>({
-    category: 'University',
+  const [form, setForm] = useState<RegistrationForm>(() => ({
+    category: getDefaultRegistrationCategory(),
     teamName: '',
     teamSize: '',
     institution: '',
     leader: createMember(),
     members: Array.from({ length: 4 }, createMember),
-  })
+  }))
 
   const teamSize = Number(form.teamSize || 3)
   const reviewStep = teamSize + 2
   const activeMemberIndex = step >= 3 && step < reviewStep ? step - 3 : null
   const visibleMembers = useMemo(() => form.members.slice(0, teamSize - 1), [form.members, teamSize])
+  const registrationState = getRegistrationWindowState(form.category, now)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => setNow(Date.now()), 30_000)
+    return () => window.clearInterval(timer)
+  }, [])
 
   const updateForm = <Key extends keyof RegistrationForm>(key: Key, value: RegistrationForm[Key]) => {
     setForm((current) => ({ ...current, [key]: value }))
@@ -131,6 +148,14 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    const currentRegistrationState = getRegistrationWindowState(form.category)
+    if (!currentRegistrationState.isOpen) {
+      setStep(1)
+      setSubmitError(`${currentRegistrationState.message} Registration dates use Sri Lanka time (UTC+5:30).`)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+      return
+    }
+
     if (step < reviewStep) {
       setStep((current) => current + 1)
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -213,6 +238,18 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
           </div>
         ) : (
           <form onSubmit={submit} className="mt-10 border border-orange-300/15 bg-[#171419] p-6 md:p-8">
+            <div
+              role="status"
+              className={`mb-8 border p-5 ${registrationState.isOpen ? 'border-emerald-400/35 bg-emerald-500/10' : 'border-orange-400/30 bg-orange-500/10'}`}
+            >
+              <div className="flex items-center gap-3">
+                <RegistrationLockIcon unlocked={registrationState.isOpen} />
+                <p className="font-black">{form.category} registration · {registrationState.statusLabel}</p>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-orange-100/65">{registrationState.message}</p>
+              <p className="mt-1 text-xs font-bold uppercase tracking-[0.12em] text-orange-100/40">Sri Lanka time · UTC+5:30</p>
+            </div>
+
             <div className="mb-8">
               <div className="flex gap-2" aria-hidden="true">
                 {Array.from({ length: reviewStep }, (_, index) => (
@@ -229,36 +266,60 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
                 <div className="mt-6">
                   <label className="text-sm font-bold">Choose category *</label>
                   <div className="mt-3 grid gap-3 sm:grid-cols-2">
-                    {(['University', 'School'] as Category[]).map((category) => (
-                      <button
-                        type="button"
-                        key={category}
-                        aria-pressed={form.category === category}
-                        onClick={() => updateForm('category', category)}
-                        className={`border p-5 text-left font-bold transition ${form.category === category ? 'border-orange-500 bg-orange-500/15 text-orange-300' : 'border-white/10 text-orange-100/60 hover:border-orange-300/40'}`}
-                      >
-                        {category} category
-                      </button>
-                    ))}
+                    {(['University', 'School'] as Category[]).map((category) => {
+                      const state = getRegistrationWindowState(category, now)
+                      const isSelected = form.category === category
+                      return (
+                        <button
+                          type="button"
+                          key={category}
+                          disabled={!state.isOpen}
+                          aria-pressed={isSelected}
+                          onClick={() => updateForm('category', category)}
+                          className={`border p-5 text-left transition ${
+                            state.isOpen
+                              ? isSelected
+                                ? 'border-orange-500 bg-orange-500/15 text-orange-300'
+                                : 'border-white/10 text-orange-100/65 hover:border-orange-300/40'
+                              : 'cursor-not-allowed border-white/10 bg-[#111014]/70 text-orange-100/40'
+                          }`}
+                        >
+                          <span className="flex items-center justify-between gap-3 font-bold">
+                            {category} category
+                            <span className="flex items-center gap-2 text-xs uppercase tracking-[0.12em]">
+                              <RegistrationLockIcon unlocked={state.isOpen} />
+                              {state.statusLabel}
+                            </span>
+                          </span>
+                          <span className="mt-3 block text-xs font-normal leading-5 text-orange-100/45">{state.message}</span>
+                        </button>
+                      )
+                    })}
                   </div>
                 </div>
-                <div className="mt-6 grid gap-5 sm:grid-cols-2">
-                  <Field label="Team name" value={form.teamName} onChange={(value) => updateForm('teamName', value)} />
-                  <label className="text-sm font-bold">
-                    Number of team members *
-                    <select
-                      required
-                      value={form.teamSize}
-                      onChange={(event) => updateForm('teamSize', event.target.value as TeamSize)}
-                      className={`${inputClass} appearance-none pr-12`}
-                    >
-                      <option value="">Select team size</option>
-                      <option value="3">3 members</option>
-                      <option value="4">4 members</option>
-                      <option value="5">5 members</option>
-                    </select>
-                  </label>
-                </div>
+                {registrationState.isOpen ? (
+                  <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                    <Field label="Team name" value={form.teamName} onChange={(value) => updateForm('teamName', value)} />
+                    <label className="text-sm font-bold">
+                      Number of team members *
+                      <select
+                        required
+                        value={form.teamSize}
+                        onChange={(event) => updateForm('teamSize', event.target.value as TeamSize)}
+                        className={`${inputClass} appearance-none pr-12`}
+                      >
+                        <option value="">Select team size</option>
+                        <option value="3">3 members</option>
+                        <option value="4">4 members</option>
+                        <option value="5">5 members</option>
+                      </select>
+                    </label>
+                  </div>
+                ) : (
+                  <p className="mt-6 border-l-2 border-orange-500 px-4 py-2 text-sm leading-6 text-orange-100/60">
+                    This category will unlock automatically when its registration period begins.
+                  </p>
+                )}
               </div>
             )}
 
@@ -314,7 +375,9 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
 
             <div className="mt-8 flex flex-wrap gap-3">
               {step > 1 && <button type="button" onClick={goBack} className="border border-white/15 px-6 py-3 font-bold text-orange-100/75 hover:border-orange-400 hover:text-white">Previous</button>}
-              <button type="submit" disabled={submitting} className="bg-orange-600 px-6 py-3 font-bold hover:bg-orange-500 disabled:cursor-wait disabled:opacity-60">{step < reviewStep ? 'Continue' : submitting ? 'Saving registration…' : 'Submit registration'}</button>
+              <button type="submit" disabled={submitting || !registrationState.isOpen} className="bg-orange-600 px-6 py-3 font-bold hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-45">
+                {!registrationState.isOpen ? 'Registration locked' : step < reviewStep ? 'Continue' : submitting ? 'Saving registration…' : 'Submit registration'}
+              </button>
             </div>
             {submitError && <p role="alert" className="mt-4 border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm font-bold text-red-200">{submitError}</p>}
           </form>
