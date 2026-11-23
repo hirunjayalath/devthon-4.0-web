@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react'
 import type { FormEvent, HTMLInputTypeAttribute } from 'react'
 import { getDefaultRegistrationCategory, getRegistrationWindowState } from './registrationSchedule'
 import type { Category } from './registrationSchedule'
+import { REGISTRATION_WINDOWS } from './registrationSchedule'
+import { StageCountdown } from './StageCountdown'
 
 type TeamSize = '' | '3' | '4' | '5'
 
@@ -127,7 +129,7 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
   const registrationState = getRegistrationWindowState(form.category, now)
 
   useEffect(() => {
-    const timer = window.setInterval(() => setNow(Date.now()), 30_000)
+    const timer = window.setInterval(() => setNow(Date.now()), 1_000)
     return () => window.clearInterval(timer)
   }, [])
 
@@ -218,7 +220,7 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
             <p className="text-sm font-black uppercase tracking-[0.22em] text-orange-400">Registration complete</p>
             <h2 className="mt-4 text-2xl font-black">Your team is registered</h2>
             <p className="mt-3 text-base leading-7 text-orange-100/65">Your information has been securely saved for the DEV{'{thon}'} 4.0 organizing team.</p>
-            <p className="mt-4 border border-orange-300/20 bg-[#111014] px-4 py-3 font-mono text-sm text-orange-300">Registration ID: {registrationId}</p>
+            <p className="mt-4 border border-orange-300/20 bg-[#111014] px-4 py-3 font-mono text-sm text-orange-300">Team ID: {registrationId}</p>
             <div className="mt-6 border border-[#25D366]/35 bg-[#25D366]/10 p-5">
               <p className="font-black text-white">Join your {form.category.toLowerCase()} category WhatsApp group</p>
               <p className="mt-2 text-sm leading-6 text-orange-100/65">Get important competition announcements, reminders and updates from the organizing team.</p>
@@ -280,6 +282,12 @@ export function RegistrationPage({ onBack }: { onBack: () => void }) {
                             </span>
                           </span>
                           <span className="mt-3 block text-xs font-normal leading-5 text-orange-100/45">{state.message}</span>
+                          <StageCountdown
+                            opensAt={REGISTRATION_WINDOWS[category].opensAt}
+                            closesAt={REGISTRATION_WINDOWS[category].closesAt}
+                            now={now}
+                            className="mt-4"
+                          />
                         </button>
                       )
                     })}

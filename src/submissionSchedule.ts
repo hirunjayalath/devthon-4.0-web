@@ -1,6 +1,8 @@
 import type { Category } from './registrationSchedule'
+import { TESTING_MODE } from './testingMode'
 
 export type SubmissionType = 'Proposal' | 'UI/UX'
+export type SubmissionInputMode = 'file' | 'figma-link'
 export type SubmissionKey = 'university-proposal' | 'school-proposal' | 'university-uiux'
 export type SubmissionPhase = 'upcoming' | 'open' | 'closed'
 
@@ -13,6 +15,7 @@ export type SubmissionWindow = {
   opensLabel: string
   closesLabel: string
   timelineLabel: string
+  inputMode: SubmissionInputMode
   acceptedFormats: string
   accept: string
 }
@@ -34,6 +37,7 @@ export const SUBMISSION_WINDOWS: Record<SubmissionKey, SubmissionWindow> = {
     opensLabel: 'December 24, 2026',
     closesLabel: 'December 31, 2026',
     timelineLabel: 'Dec 24 – Dec 31',
+    inputMode: 'file',
     acceptedFormats: 'PDF, DOC, DOCX, PPT, PPTX or ZIP · maximum 8 MB',
     accept: '.pdf,.doc,.docx,.ppt,.pptx,.zip',
   },
@@ -46,6 +50,7 @@ export const SUBMISSION_WINDOWS: Record<SubmissionKey, SubmissionWindow> = {
     opensLabel: 'January 5, 2027',
     closesLabel: 'January 17, 2027',
     timelineLabel: 'Jan 05 – Jan 17',
+    inputMode: 'file',
     acceptedFormats: 'PDF, DOC, DOCX, PPT, PPTX or ZIP · maximum 8 MB',
     accept: '.pdf,.doc,.docx,.ppt,.pptx,.zip',
   },
@@ -58,8 +63,9 @@ export const SUBMISSION_WINDOWS: Record<SubmissionKey, SubmissionWindow> = {
     opensLabel: 'January 13, 2027',
     closesLabel: 'January 20, 2027',
     timelineLabel: 'Jan 13 – Jan 20',
-    acceptedFormats: 'PDF, PNG, JPG, JPEG or ZIP · maximum 8 MB',
-    accept: '.pdf,.png,.jpg,.jpeg,.zip',
+    inputMode: 'figma-link',
+    acceptedFormats: 'Public Figma link · The link should be public',
+    accept: '',
   },
 }
 
@@ -67,6 +73,16 @@ export const SUBMISSION_ORDER = Object.keys(SUBMISSION_WINDOWS) as SubmissionKey
 
 export function getSubmissionWindowState(key: SubmissionKey, now = Date.now()): SubmissionWindowState {
   const schedule = SUBMISSION_WINDOWS[key]
+
+  if (TESTING_MODE) {
+    return {
+      phase: 'open',
+      isOpen: true,
+      statusLabel: 'Open',
+      message: `${schedule.category} ${schedule.type} Submission is temporarily open for testing.`,
+    }
+  }
+
   const opensAt = new Date(schedule.opensAt).getTime()
   const closesAt = new Date(schedule.closesAt).getTime()
 
@@ -75,7 +91,7 @@ export function getSubmissionWindowState(key: SubmissionKey, now = Date.now()): 
       phase: 'upcoming',
       isOpen: false,
       statusLabel: 'Locked',
-      message: `${schedule.category} ${schedule.type} submission opens on ${schedule.opensLabel}.`,
+      message: `${schedule.category} ${schedule.type} Submission opens on ${schedule.opensLabel}.`,
     }
   }
 

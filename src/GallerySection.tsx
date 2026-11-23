@@ -91,17 +91,17 @@ export function GallerySection() {
   }, [selectedImage])
 
   return (
-    <section id="gallery" className="reveal-on-scroll scroll-mt-16 bg-[#171419] px-6 py-24 md:px-12">
+    <section id="gallery" className="reveal-on-scroll scroll-mt-14 bg-[#171419] px-4 py-16 sm:scroll-mt-16 sm:px-6 sm:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-7xl">
-        <div className="mb-16 max-w-2xl">
+        <div className="mb-10 max-w-2xl sm:mb-16">
           <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-white/60">Gallery</p>
-          <h2 className="text-3xl font-black tracking-tight md:text-5xl">
+          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">
             <span className="block">Three editions</span>
             <span className="block">One growing story</span>
           </h2>
         </div>
 
-        <div className="space-y-20">
+        <div className="space-y-14 sm:space-y-20">
           {editions.map((edition) => {
             const [featured, ...moments] = edition.images
             const hasManyPhotos = moments.length > 6
@@ -119,7 +119,7 @@ export function GallerySection() {
                   <button
                     type="button"
                     onClick={() => setSelectedImage(featured)}
-                    className={`group relative overflow-hidden border border-white/15 bg-[#111014] text-left focus-visible:outline-2 focus-visible:outline-white ${hasManyPhotos ? 'aspect-[16/9] md:aspect-[16/7]' : 'min-h-[20rem] lg:min-h-full'}`}
+                    className={`group relative overflow-hidden border border-white/15 bg-[#111014] text-left focus-visible:outline-2 focus-visible:outline-white ${hasManyPhotos ? 'aspect-[16/9] md:aspect-[16/7]' : 'min-h-[14rem] sm:min-h-[20rem] lg:min-h-full'}`}
                     aria-label={`Open ${featured.caption}`}
                   >
                     <img className="absolute inset-0 h-full w-full object-cover" src={featured.src} alt={featured.alt} loading="lazy" />

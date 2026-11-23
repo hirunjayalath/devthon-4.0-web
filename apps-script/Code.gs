@@ -4,15 +4,23 @@ const SUBMISSIONS_SHEET_NAMES = {
   University: 'University Submissions',
   School: 'School Submissions',
 };
+const SUBMISSION_VIEW_DEFINITIONS = [
+  { name: 'UNI Proposal', source: 'University Submissions', stage: 'Proposal' },
+  { name: 'UNI UI-UX', source: 'University Submissions', stage: 'UI/UX' },
+  { name: 'School Proposal', source: 'School Submissions', stage: 'Proposal' },
+];
 const SUBMISSIONS_FOLDER_NAME = 'DEVthon 4.0 Submissions';
 const EXPECTED_REGISTRATION_SOURCE = 'devthon-4-registration-v1';
 const EXPECTED_SUBMISSION_SOURCE = 'devthon-4-submission-v1';
 const MAX_SUBMISSION_BYTES = 8 * 1024 * 1024;
+// Temporary launch-testing switch. Set to false before the public submission period.
+const TESTING_MODE = true;
 
 const SUBMISSION_WINDOWS = {
   'university-proposal': {
     category: 'University',
     type: 'Proposal',
+    inputMode: 'file',
     opensAt: '2026-12-24T00:00:00+05:30',
     closesAt: '2026-12-31T23:59:59.999+05:30',
     extensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'zip'],
@@ -20,6 +28,7 @@ const SUBMISSION_WINDOWS = {
   'school-proposal': {
     category: 'School',
     type: 'Proposal',
+    inputMode: 'file',
     opensAt: '2027-01-05T00:00:00+05:30',
     closesAt: '2027-01-17T23:59:59.999+05:30',
     extensions: ['pdf', 'doc', 'docx', 'ppt', 'pptx', 'zip'],
@@ -27,6 +36,7 @@ const SUBMISSION_WINDOWS = {
   'university-uiux': {
     category: 'University',
     type: 'UI/UX',
+    inputMode: 'figma-link',
     opensAt: '2027-01-13T00:00:00+05:30',
     closesAt: '2027-01-20T23:59:59.999+05:30',
     extensions: ['pdf', 'png', 'jpg', 'jpeg', 'zip'],
@@ -90,9 +100,15 @@ function sanitizeFileName(value) {
     .slice(0, 120) || 'submission';
 }
 
+function isFigmaLink(value) {
+  return /^https:\/\/(?:www\.)?figma\.com\/.+/i.test(String(value || '').trim());
+}
+
 function validateSubmissionWindow(key, now) {
   const schedule = SUBMISSION_WINDOWS[key];
   if (!schedule) throw new Error('Invalid submission stage.');
+
+  if (TESTING_MODE) return schedule;
 
   const opensAt = new Date(schedule.opensAt).getTime();
   const closesAt = new Date(schedule.closesAt).getTime();
@@ -118,7 +134,7 @@ function findRegisteredTeam(registrationId) {
       };
     }
   }
-  throw new Error('Registration ID was not found.');
+  throw new Error('Team ID was not found.');
 }
 
 function validateSubmission(data, now) {
@@ -130,23 +146,31 @@ function validateSubmission(data, now) {
   const teamName = String(data.teamName || '').trim();
   const leaderEmail = String(data.leaderEmail || '').trim();
   const file = data.file || {};
-  const fileName = sanitizeFileName(file.name);
-  const extension = fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
+  const figmaUrl = String(data.figmaUrl || '').trim();
+  let fileName = '';
+  let mimeType = '';
+  let bytes = [];
 
   if (!registrationId || !teamName || !leaderEmail) throw new Error('Team verification details are incomplete.');
   if (String(data.category || '') !== schedule.category || String(data.submissionType || '') !== schedule.type) {
     throw new Error('Submission category does not match the selected stage.');
   }
-  if (!fileName || !String(file.base64 || '')) throw new Error('A submission file is required.');
-  if (!schedule.extensions.includes(extension)) throw new Error('This file type is not accepted for the selected stage.');
+  if (schedule.inputMode === 'figma-link') {
+    if (!isFigmaLink(figmaUrl)) throw new Error('A valid public Figma link is required for UI/UX submissions.');
+  } else {
+    fileName = sanitizeFileName(file.name);
+    const extension = fileName.includes('.') ? fileName.split('.').pop().toLowerCase() : '';
+    if (!fileName || !String(file.base64 || '')) throw new Error('A submission file is required.');
+    if (!schedule.extensions.includes(extension)) throw new Error('This file type is not accepted for the selected stage.');
+    bytes = Utilities.base64Decode(String(file.base64));
+    if (!bytes.length || bytes.length > MAX_SUBMISSION_BYTES) throw new Error('The file must be 8 MB or smaller.');
+    mimeType = String(file.type || 'application/octet-stream');
+  }
 
   const registeredTeam = findRegisteredTeam(registrationId);
   if (registeredTeam.category !== schedule.category) throw new Error('The registration category does not match this submission.');
   if (normalizedText(registeredTeam.teamName) !== normalizedText(teamName)) throw new Error('The team name does not match the registration.');
   if (normalizedText(registeredTeam.leaderEmail) !== normalizedText(leaderEmail)) throw new Error('The leader email does not match the registration.');
-
-  const bytes = Utilities.base64Decode(String(file.base64));
-  if (!bytes.length || bytes.length > MAX_SUBMISSION_BYTES) throw new Error('The file must be 8 MB or smaller.');
 
   return {
     key,
@@ -155,8 +179,10 @@ function validateSubmission(data, now) {
     registrationId: registeredTeam.registrationId,
     teamName: registeredTeam.teamName,
     leaderEmail: registeredTeam.leaderEmail,
+    inputMode: schedule.inputMode,
+    figmaUrl,
     fileName,
-    mimeType: String(file.type || 'application/octet-stream'),
+    mimeType,
     bytes,
   };
 }
@@ -170,32 +196,57 @@ function getOrCreateSubmissionSheet(spreadsheet, category) {
   const sheetName = SUBMISSIONS_SHEET_NAMES[category];
   if (!sheetName) throw new Error('Invalid submission category.');
 
+  const headers = [
+    'Submitted at',
+    'Submission ID',
+    'Team ID',
+    'Category',
+    'Stage',
+    'Team name',
+    'Leader email',
+    'Original file name',
+    'File type',
+    'File size',
+    'Drive file ID',
+    'Drive URL',
+    'Submission format',
+    'Figma URL',
+  ];
+
   let sheet = spreadsheet.getSheetByName(sheetName);
   if (!sheet) {
     sheet = spreadsheet.insertSheet(sheetName);
-    sheet.appendRow([
-      'Submitted at',
-      'Submission ID',
-      'Registration ID',
-      'Category',
-      'Stage',
-      'Team name',
-      'Leader email',
-      'Original file name',
-      'File type',
-      'File size',
-      'Drive file ID',
-      'Drive URL',
-    ]);
+    sheet.appendRow(headers);
     sheet.setFrozenRows(1);
   }
+  if (sheet.getMaxColumns() < headers.length) {
+    sheet.insertColumnsAfter(sheet.getMaxColumns(), headers.length - sheet.getMaxColumns());
+  }
+  sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
   return sheet;
+}
+
+function syncSubmissionViews(spreadsheet) {
+  SUBMISSION_VIEW_DEFINITIONS.forEach(function (view) {
+    let sheet = spreadsheet.getSheetByName(view.name);
+    if (!sheet) sheet = spreadsheet.insertSheet(view.name);
+    if (sheet.getMaxColumns() < 14) {
+      sheet.insertColumnsAfter(sheet.getMaxColumns(), 14 - sheet.getMaxColumns());
+    }
+    sheet.getRange('A1').setFormula(
+      '=QUERY(\'' + view.source + '\'!A:N,"select * where E = \'' + view.stage + '\'",1)'
+    );
+    sheet.setFrozenRows(1);
+  });
 }
 
 function initializeSubmissionStorage() {
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  const registrationSheet = spreadsheet.getSheetByName(SHEET_NAME);
+  if (registrationSheet) registrationSheet.getRange(1, 2).setValue('Team ID');
   getOrCreateSubmissionSheet(spreadsheet, 'University');
   getOrCreateSubmissionSheet(spreadsheet, 'School');
+  syncSubmissionViews(spreadsheet);
 
   const rootFolders = DriveApp.getFoldersByName(SUBMISSIONS_FOLDER_NAME);
   const rootFolder = rootFolders.hasNext() ? rootFolders.next() : DriveApp.createFolder(SUBMISSIONS_FOLDER_NAME);
@@ -219,15 +270,22 @@ function saveSubmission(data, now) {
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
   const sheet = getOrCreateSubmissionSheet(spreadsheet, submission.category);
 
-  const rootFolders = DriveApp.getFoldersByName(SUBMISSIONS_FOLDER_NAME);
-  const rootFolder = rootFolders.hasNext() ? rootFolders.next() : DriveApp.createFolder(SUBMISSIONS_FOLDER_NAME);
-  const categoryFolder = getOrCreateFolder(rootFolder, submission.category);
-  const stageFolder = getOrCreateFolder(categoryFolder, submission.type.replace('/', '-'));
   const timestamp = Utilities.formatDate(now, 'Asia/Colombo', 'yyyyMMdd-HHmmss');
   const submissionId = 'DEV4-SUB-' + timestamp + '-' + Math.floor(100 + Math.random() * 900);
-  const storedName = sanitizeFileName(submission.registrationId + '-' + submission.type.replace('/', '-') + '-' + submission.fileName);
-  const blob = Utilities.newBlob(submission.bytes, submission.mimeType, storedName);
-  const driveFile = stageFolder.createFile(blob);
+  let driveFileId = '';
+  let driveFileUrl = '';
+
+  if (submission.inputMode === 'file') {
+    const rootFolders = DriveApp.getFoldersByName(SUBMISSIONS_FOLDER_NAME);
+    const rootFolder = rootFolders.hasNext() ? rootFolders.next() : DriveApp.createFolder(SUBMISSIONS_FOLDER_NAME);
+    const categoryFolder = getOrCreateFolder(rootFolder, submission.category);
+    const stageFolder = getOrCreateFolder(categoryFolder, submission.type.replace('/', '-'));
+    const storedName = sanitizeFileName(submission.registrationId + '-' + submission.type.replace('/', '-') + '-' + submission.fileName);
+    const blob = Utilities.newBlob(submission.bytes, submission.mimeType, storedName);
+    const driveFile = stageFolder.createFile(blob);
+    driveFileId = driveFile.getId();
+    driveFileUrl = driveFile.getUrl();
+  }
 
   sheet.appendRow([
     now,
@@ -240,8 +298,10 @@ function saveSubmission(data, now) {
     submission.fileName,
     submission.mimeType,
     submission.bytes.length,
-    driveFile.getId(),
-    driveFile.getUrl(),
+    driveFileId,
+    driveFileUrl,
+    submission.inputMode === 'figma-link' ? 'Figma link' : 'File upload',
+    submission.figmaUrl,
   ]);
 
   return { success: true, submissionId };

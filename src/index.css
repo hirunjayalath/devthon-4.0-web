@@ -4,8 +4,9 @@
   --font-code: "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
 }
 
-html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: #111014; color: #ffffff; font-family: var(--font-code); }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body { margin: 0; min-width: 0; overflow-x: clip; background: #111014; color: #ffffff; font-family: var(--font-code); }
+img, video, canvas { max-width: 100%; }
 button, a { -webkit-tap-highlight-color: transparent; }
 body.is-loading { overflow: hidden; }
 
@@ -238,10 +239,14 @@ body.is-loading { overflow: hidden; }
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 1.25rem;
+  left: 0.75rem;
   width: 1px;
   overflow: hidden;
   background: rgba(249, 115, 22, 0.38);
+}
+
+@media (min-width: 640px) {
+  .timeline-spine { left: 1.375rem; }
 }
 
 .timeline-spine__runner {

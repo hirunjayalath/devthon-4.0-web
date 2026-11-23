@@ -11,7 +11,7 @@ function SectionTitle({ eyebrow, title, text }: { eyebrow: string; title: ReactN
   return (
     <div className="mb-10 max-w-2xl">
       <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">{eyebrow}</p>
-      <h2 className="text-3xl font-black tracking-tight md:text-5xl">{title}</h2>
+      <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">{title}</h2>
       <p className="mt-4 text-base leading-7 text-orange-100/60">{text}</p>
     </div>
   )
@@ -25,12 +25,12 @@ export function AboutSection() {
   ]
 
   return (
-    <section id="about" className="reveal-on-scroll bg-[#171419] px-6 py-24 md:px-12">
+    <section id="about" className="reveal-on-scroll scroll-mt-14 bg-[#171419] px-4 py-16 sm:scroll-mt-16 sm:px-6 sm:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionTitle eyebrow="About the event" title="Learning through development" text="Turn an idea into a proposal, refine the user experience and demonstrate a working solution with guidance from mentors and facilitators." />
-        <div className="grid gap-5 md:grid-cols-3">
+        <div className="grid gap-5 lg:grid-cols-3">
           {cards.map(([title, copy], index) => (
-            <article key={title} className="border border-orange-300/10 bg-[#111014] p-7 transition hover:-translate-y-1 hover:border-orange-500/40">
+            <article key={title} className="border border-orange-300/10 bg-[#111014] p-5 transition hover:-translate-y-1 hover:border-orange-500/40 sm:p-7">
               <p className="code-key">event.{['vision', 'mission', 'objectives'][index]}</p>
               <h3 className="mt-7 text-xl font-bold">{title}</h3>
               <p className="mt-3 leading-7 text-orange-100/55">{copy}</p>
@@ -49,7 +49,7 @@ export function CategoryOverview() {
   ]
 
   return (
-    <section className="reveal-on-scroll px-6 py-24 md:px-12">
+    <section className="reveal-on-scroll px-4 py-16 sm:px-6 sm:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionTitle
           eyebrow="Choose your track"
@@ -58,9 +58,9 @@ export function CategoryOverview() {
         />
         <div className="grid gap-6 md:grid-cols-2">
           {categories.map(([title, copy], index) => (
-            <article key={title} className="border border-orange-300/15 bg-[#111014] p-8">
+            <article key={title} className="border border-orange-300/15 bg-[#111014] p-5 sm:p-8">
               <p className="code-key">track.{index === 0 ? 'school' : 'university'}</p>
-              <h3 className="mt-12 text-3xl font-black">{title}</h3>
+              <h3 className="mt-8 text-2xl font-black sm:mt-12 sm:text-3xl">{title}</h3>
               <p className="mt-4 max-w-lg leading-7 text-orange-100/60">{copy}</p>
             </article>
           ))}
@@ -75,8 +75,8 @@ export function OrganizersSection() {
     {
       role: 'Lead organizer',
       name: 'Leo Club of University of Moratuwa',
-      description: 'Leading the charge in youth empowerment and technological innovation through service and leadership.',
-      focus: 'Service / Leadership / Innovation',
+      description: 'With more than 20 years of service, leadership and community impact, the Leo Club of University of Moratuwa proudly leads DEV{thon} for its fourth edition. It continues to provide a platform that inspires young people to learn, collaborate and build meaningful digital solutions.',
+      focus: '20+ Years of Service / 4th DEV{thon} Edition / Youth Leadership',
       logo: leoUomLogo,
       logoAlt: 'Leo Club of University of Moratuwa logo',
       logoScale: 1.06,
@@ -84,8 +84,8 @@ export function OrganizersSection() {
     {
       role: 'Co-organizer',
       name: 'Leo Club of Sri Lanka Technology Campus',
-      description: 'Building future leaders through technology and service with a vision for sustainable development.',
-      focus: 'Technology / Innovation / Leadership',
+      description: 'Having supported DEV{thon} as co-organizer across all four editions, the Leo Club of Sri Lanka Technology Campus brings consistent commitment, technical energy and collaborative leadership to every stage of the competition.',
+      focus: 'Co-organizer for 4 Editions / Technology / Collaboration',
       logo: leoSltcLogo,
       logoAlt: 'Leo Club of Sri Lanka Technology Campus logo',
       logoScale: 1.18,
@@ -93,12 +93,12 @@ export function OrganizersSection() {
   ]
 
   return (
-    <section id="organizers" className="reveal-on-scroll bg-[#171419] px-6 py-24 md:px-12">
+    <section id="organizers" className="reveal-on-scroll scroll-mt-14 bg-[#171419] px-4 py-16 sm:scroll-mt-16 sm:px-6 sm:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <SectionTitle eyebrow="Organizers" title="Built by people who care about the next generation." text="A collaboration of visionary organizations committed to fostering innovation, leadership and community service." />
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-5 lg:grid-cols-2">
           {organizers.map((organizer) => (
-            <article key={organizer.name} className="grid gap-7 border border-orange-300/10 bg-[#111014] p-7 sm:grid-cols-[6rem_1fr] sm:items-center">
+            <article key={organizer.name} className="grid gap-5 border border-orange-300/10 bg-[#111014] p-5 sm:grid-cols-[6rem_1fr] sm:items-center sm:gap-7 sm:p-7">
               <div className="mx-auto h-24 w-24 overflow-hidden rounded-full">
                 <img
                   className="h-full w-full object-cover"
@@ -143,6 +143,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'karunarathnahiruna2002@gmail.com',
       photo: hirunaKarunarathna,
       photoPosition: 'center top',
+      photoScale: 1,
+      photoOffsetY: 0,
     },
     {
       name: 'Leo Pasan Amarakoon',
@@ -153,6 +155,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'amarakoonpasan1@gmail.com',
       photo: pasanAmarakoon,
       photoPosition: 'center top',
+      photoScale: 1.6,
+      photoOffsetY: -9,
     },
     {
       name: 'Leo Malshi Welikala',
@@ -163,6 +167,8 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'malshiwelikala@gmail.com',
       photo: malshiWelikala,
       photoPosition: 'center top',
+      photoScale: 1.15,
+      photoOffsetY: -3,
     },
     {
       name: 'Leo Hirun Jayalath',
@@ -173,14 +179,17 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       email: 'hirunjayalath24@gmail.com',
       photo: hirunJayalath,
       photoPosition: 'center top',
+      photoScale: 1.1,
+      photoOffsetY: 0,
+      photoTransformOrigin: 'center bottom',
     },
   ]
   return (
-    <section id="contact" className="scroll-mt-16 px-6 py-24 md:px-12">
+    <section id="contact" className="scroll-mt-14 px-4 py-16 sm:scroll-mt-16 sm:px-6 sm:py-20 lg:px-12 lg:py-24">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-2xl">
           <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Contact us</p>
-          <h2 className="text-3xl font-black tracking-tight md:text-5xl">Organizing Team</h2>
+          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">Organizing Team</h2>
           <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
 
@@ -207,12 +216,16 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
                 aria-label={`Show contact details for ${contact.name}`}
                 className="group relative cursor-pointer overflow-hidden bg-[#111014] outline-none focus-visible:outline-2 focus-visible:outline-orange-500 focus-visible:outline-offset-[-3px]"
               >
-                <div className="relative aspect-square overflow-hidden">
+                <div className="relative aspect-square overflow-hidden bg-white">
                   <img
                     src={contact.photo}
                     alt={contact.name}
                     className="absolute inset-0 h-full w-full object-cover"
-                    style={{ objectPosition: contact.photoPosition }}
+                    style={{
+                      objectPosition: contact.photoPosition,
+                      transform: `translateY(${contact.photoOffsetY}%) scale(${contact.photoScale})`,
+                      transformOrigin: contact.photoTransformOrigin ?? 'center center',
+                    }}
                   />
                 </div>
 
@@ -220,9 +233,9 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
 
                 <div className={`absolute left-0 top-0 h-0.5 bg-orange-500 transition-[width] duration-300 ${activeContact === index ? 'w-full' : 'w-0'}`} />
 
-                <div className="absolute inset-x-0 bottom-0 bg-[#111014]/95 p-6">
+                <div className="absolute inset-x-0 bottom-0 bg-[#111014]/95 p-4 sm:p-5 lg:p-6">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400"><span className="text-orange-100/40">role: </span>{contact.position}</p>
-                  <h3 className="mt-2 text-xl font-black md:text-2xl">{contact.name}</h3>
+                  <h3 className="mt-2 text-lg font-black sm:text-xl lg:text-2xl">{contact.name}</h3>
                   <div className={`grid transition-[grid-template-rows,opacity] duration-300 ${activeContact === index ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">
                       <p className="leading-6 text-orange-100/60">{contact.club}</p>
@@ -257,14 +270,14 @@ export function Footer() {
     ['Contact', '#contact'],
   ]
   const socialLinks = [
-    ['Facebook', 'https://www.facebook.com/share/1DRSQHcwxH/'],
+    ['Facebook', 'https://www.facebook.com/share/1FFTGWuYpW/'],
     ['Instagram', 'https://www.instagram.com/uomleos?igsh=OGhhN2trY3dtdXdq'],
     ['LinkedIn', 'https://www.linkedin.com/company/uomleos/'],
-    ['WhatsApp', 'https://whatsapp.com/channel/0029VaezlqsIN9ikcQiKyg39'],
+    ['WhatsApp', 'https://whatsapp.com/channel/0029Vb8oJZG6WaKfRbfx3y0J'],
   ]
 
   return (
-    <footer className="border-t border-orange-300/15 bg-[#111014] px-6 pt-14 md:px-12">
+    <footer className="border-t border-orange-300/15 bg-[#111014] px-4 pt-12 sm:px-6 sm:pt-14 lg:px-12">
       <div className="mx-auto max-w-7xl">
         <div className="grid gap-10 pb-12 text-sm text-orange-100/70 md:grid-cols-[1.4fr_1fr_1fr]">
           <div>

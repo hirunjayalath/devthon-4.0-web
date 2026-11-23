@@ -34,23 +34,23 @@ function goToSubmissions(key?: SubmissionKey) {
 
 function Navigation({ onRegister, onSubmit }: { onRegister: () => void; onSubmit: () => void }) {
   return (
-    <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#111014]/90 px-6 py-4 backdrop-blur md:px-12">
+    <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#111014]/90 px-4 py-3 backdrop-blur sm:px-6 sm:py-4 lg:px-10 xl:px-12">
       <div className="mx-auto flex max-w-7xl items-center justify-between">
-        <a href="#home" className="brand-wordmark text-xl font-black tracking-tight">
+        <a href="#home" className="brand-wordmark shrink-0 text-base font-black tracking-tight sm:text-xl">
           <span className="text-white">DEV</span><span className="text-orange-500">{'{thon}'} 4.0</span>
         </a>
-        <div className="hidden items-center gap-7 text-sm text-orange-100/70 md:flex">
+        <div className="hidden items-center gap-4 text-xs text-orange-100/70 lg:flex xl:gap-7 xl:text-sm">
           <a className="transition hover:text-white" href="#about">About</a>
           <a className="transition hover:text-white" href="#timeline">Timeline</a>
           <a className="transition hover:text-white" href="#prizes">Prizes</a>
           <a className="transition hover:text-white" href="#gallery">Gallery</a>
           <a className="transition hover:text-white" href="#organizers">Organizers</a>
-          <button onClick={onSubmit} className="border border-orange-500 px-5 py-2 font-bold text-orange-200 transition hover:bg-orange-500 hover:text-white">Submissions</button>
-          <button onClick={onRegister} onFocus={triggerBuildSequence} onMouseEnter={triggerBuildSequence} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-5 py-2 font-bold text-white transition hover:bg-orange-500">Register now</button>
+          <button onClick={onSubmit} className="border border-orange-500 px-4 py-2 font-bold text-orange-200 transition hover:bg-orange-500 hover:text-white xl:px-5">Submissions</button>
+          <button onClick={onRegister} onFocus={triggerBuildSequence} onMouseEnter={triggerBuildSequence} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-4 py-2 font-bold text-white transition hover:bg-orange-500 xl:px-5">Register now</button>
         </div>
-        <div className="flex gap-2 md:hidden">
-          <button onClick={onSubmit} className="border border-orange-500 px-3 py-2 text-xs font-bold">Submit</button>
-          <button onClick={onRegister} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-3 py-2 text-xs font-bold">Register</button>
+        <div className="flex gap-1.5 lg:hidden sm:gap-2">
+          <button onClick={onSubmit} className="border border-orange-500 px-2.5 py-2 text-[0.7rem] font-bold sm:px-3 sm:text-xs">Submit</button>
+          <button onClick={onRegister} onPointerDown={triggerBuildSequence} className="bg-orange-600 px-2.5 py-2 text-[0.7rem] font-bold sm:px-3 sm:text-xs">Register</button>
         </div>
       </div>
     </nav>

@@ -1,3 +1,5 @@
+import { TESTING_MODE } from './testingMode'
+
 export type Category = 'University' | 'School'
 
 type RegistrationWindow = {
@@ -38,6 +40,16 @@ const CATEGORY_ORDER: Category[] = ['University', 'School']
 
 export function getRegistrationWindowState(category: Category, now = Date.now()): RegistrationWindowState {
   const schedule = REGISTRATION_WINDOWS[category]
+
+  if (TESTING_MODE) {
+    return {
+      phase: 'open',
+      isOpen: true,
+      statusLabel: 'Unlocked',
+      message: `${category} registration is temporarily unlocked for testing.`,
+    }
+  }
+
   const opensAt = Date.parse(schedule.opensAt)
   const closesAt = Date.parse(schedule.closesAt)
 
