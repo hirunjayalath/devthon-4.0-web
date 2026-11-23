@@ -1,6 +1,9 @@
 import { DragonGuardian } from './DragonGuardian'
 import { triggerBuildSequence } from './heroExperienceEvents'
 
+const BOOKLET_DRIVE_URL = (import.meta.env.VITE_BOOKLET_DRIVE_URL as string | undefined)?.trim()
+  || 'https://drive.google.com/drive/folders/1O8vSp6vfekBMIT7CCKJNnURtoBPM2gzb?usp=sharing'
+
 export function HeroSection({ onRegister, onSubmit }: { onRegister: () => void; onSubmit: () => void }) {
   return (
     <section className="relative isolate flex min-h-[calc(100svh-3.75rem)] items-center overflow-hidden px-4 py-10 sm:min-h-[calc(100svh-4.25rem)] sm:px-6 sm:py-12 lg:px-12 lg:py-16">
@@ -32,25 +35,15 @@ export function HeroSection({ onRegister, onSubmit }: { onRegister: () => void; 
             </button>
             <a href="#about" className="w-full border border-orange-300/30 px-6 py-3.5 font-bold text-orange-100 transition-colors hover:border-orange-400/60 sm:w-auto sm:px-7">Explore event</a>
           </div>
-          <div className="mx-auto mt-4 grid w-full max-w-sm gap-3 sm:mt-5 sm:max-w-2xl sm:grid-cols-2">
-            <button
-              type="button"
-              disabled
-              title="School Category Booklet PDF will be added soon"
-              className="cursor-not-allowed border border-orange-300/20 bg-[#171419]/80 px-5 py-3 text-orange-100/70"
+          <div className="mx-auto mt-4 flex w-full max-w-sm justify-center sm:mt-5 sm:max-w-none">
+            <a
+              href={BOOKLET_DRIVE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block w-full border border-orange-300/30 bg-[#171419]/90 px-6 py-3.5 font-bold text-orange-100 transition-colors hover:border-orange-400/60 hover:bg-orange-500/10 sm:w-auto sm:min-w-[14rem] sm:px-7"
             >
-              <span className="block text-sm font-bold text-orange-100 sm:text-base">School Category Booklet</span>
-              <span className="mt-1 block text-xs uppercase tracking-[0.14em] text-orange-100/35">PDF coming soon</span>
-            </button>
-            <button
-              type="button"
-              disabled
-              title="University Category Booklet PDF will be added soon"
-              className="cursor-not-allowed border border-orange-300/20 bg-[#171419]/80 px-5 py-3 text-orange-100/70"
-            >
-              <span className="block text-sm font-bold text-orange-100 sm:text-base">University Category Booklet</span>
-              <span className="mt-1 block text-xs uppercase tracking-[0.14em] text-orange-100/35">PDF coming soon</span>
-            </button>
+              Booklet
+            </a>
           </div>
         </div>
       </div>
