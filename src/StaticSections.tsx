@@ -126,7 +126,7 @@ function ContactLinks() {
   return (
     <address className="grid gap-2 not-italic">
       <a className="break-words transition hover:text-orange-400" href="mailto:hirunjayalath24@gmail.com">hirunjayalath24@gmail.com</a>
-      <a className="w-fit transition hover:text-orange-400" href="tel:+94769155963">0769155963</a>
+      <a className="w-fit transition hover:text-orange-400" href="tel:+94769155953">0769155953</a>
     </address>
   )
 }
@@ -287,7 +287,11 @@ export function Footer() {
             <a href="#home" className="brand-wordmark text-3xl font-black tracking-tight text-white">
               DEV<span className="text-orange-500">{'{thon}'} 4.0</span>
             </a>
-            <p className="mt-3">Design your dreams into reality.</p>
+            <p className="mt-3">
+              <span className="text-orange-500" aria-hidden="true">&lt;!-- </span>
+              Design your dreams into reality.
+              <span className="text-orange-500" aria-hidden="true"> --&gt;</span>
+            </p>
             <ul aria-label="Social media" className="mt-5 flex flex-wrap gap-x-4 gap-y-2">
               {socialLinks.map(([label, href]) => (
                 <li key={label}><a className="transition hover:text-orange-400" href={href}>{label}</a></li>

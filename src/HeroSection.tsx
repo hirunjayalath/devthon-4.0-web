@@ -15,13 +15,9 @@ export function HeroSection({ onRegister, onSubmit }: { onRegister: () => void; 
             className="text-[clamp(1.65rem,6.3vw,4.35rem)] font-black leading-[0.92] tracking-tight sm:leading-[0.95]"
             aria-label="Design your dreams into reality"
           >
-            <span className="block sm:whitespace-nowrap">
-              <span className="text-orange-500" aria-hidden="true">&lt;!-- </span>
-              Design your dreams
-            </span>
+            <span className="block sm:whitespace-nowrap">Design your dreams</span>
             <span className="block sm:whitespace-nowrap">
               <span className="text-orange-500">into reality</span>
-              <span className="text-orange-500" aria-hidden="true"> --&gt;</span>
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-4xl text-base leading-7 text-orange-100/65 sm:mt-7 sm:text-lg sm:leading-8">DEV{'{thon}'} 4.0 is a practical platform for school and university developers to learn, collaborate and build meaningful web solutions.</p>
