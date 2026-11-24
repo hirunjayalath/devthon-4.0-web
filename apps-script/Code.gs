@@ -62,6 +62,80 @@ function plainText(value) {
   return "'" + String(value || '').trim();
 }
 
+function registrationCategorySuffix(category) {
+  if (category === 'University') return 'U';
+  if (category === 'School') return 'S';
+  throw new Error('Invalid registration category.');
+}
+
+function formatRegistrationId(sequence, category) {
+  return 'DEV-' + String(sequence).padStart(3, '0') + registrationCategorySuffix(category);
+}
+
+function nextRegistrationId(sheet, category) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return formatRegistrationId(1, category);
+
+  const suffix = registrationCategorySuffix(category);
+  const rows = sheet.getRange(2, 2, lastRow - 1, 2).getValues();
+  let categoryRowCount = 0;
+  let largestSequence = 0;
+
+  rows.forEach(function (row) {
+    if (String(row[1] || '').trim() !== category) return;
+    categoryRowCount += 1;
+    const match = String(row[0] || '').trim().match(/^DEV-(\d+)([US])$/i);
+    if (match && match[2].toUpperCase() === suffix) {
+      largestSequence = Math.max(largestSequence, Number(match[1]));
+    }
+  });
+
+  return formatRegistrationId(Math.max(categoryRowCount, largestSequence) + 1, category);
+}
+
+function migrateLegacyRegistrationIds() {
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  if (!sheet) throw new Error('Registration sheet was not found.');
+
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) return { updated: 0 };
+
+  const range = sheet.getRange(2, 2, lastRow - 1, 2);
+  const rows = range.getValues();
+  const usedSequences = { U: {}, S: {} };
+  const nextCandidate = { U: 1, S: 1 };
+
+  rows.forEach(function (row) {
+    const category = String(row[1] || '').trim();
+    if (!['University', 'School'].includes(category)) return;
+    const suffix = registrationCategorySuffix(category);
+    const match = String(row[0] || '').trim().match(/^DEV-(\d+)([US])$/i);
+    if (match && match[2].toUpperCase() === suffix) {
+      usedSequences[suffix][Number(match[1])] = true;
+    }
+  });
+
+  let updated = 0;
+  const migratedIds = rows.map(function (row) {
+    const currentId = String(row[0] || '').trim();
+    const category = String(row[1] || '').trim();
+    if (!['University', 'School'].includes(category)) return [currentId];
+
+    const suffix = registrationCategorySuffix(category);
+    if (/^DEV-(\d+)([US])$/i.test(currentId)) return [currentId];
+
+    while (usedSequences[suffix][nextCandidate[suffix]]) nextCandidate[suffix] += 1;
+    const sequence = nextCandidate[suffix];
+    usedSequences[suffix][sequence] = true;
+    nextCandidate[suffix] += 1;
+    updated += 1;
+    return [formatRegistrationId(sequence, category)];
+  });
+
+  sheet.getRange(2, 2, migratedIds.length, 1).setValues(migratedIds);
+  return { updated };
+}
+
 function validateRegistration(data) {
   const category = String(data.category || '');
   const teamSize = Number(data.teamSize);
@@ -309,9 +383,9 @@ function saveSubmission(data, now) {
 
 function saveRegistration(data, now) {
   const registration = validateRegistration(data);
-  const registrationId = 'DEV4-' + Utilities.formatDate(now, 'Asia/Colombo', 'yyyyMMdd-HHmmss') + '-' + Math.floor(100 + Math.random() * 900);
   const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
   if (!sheet) throw new Error('Registration sheet was not found.');
+  const registrationId = nextRegistrationId(sheet, registration.category);
 
   const participantCells = [];
   for (let index = 0; index < 4; index += 1) {

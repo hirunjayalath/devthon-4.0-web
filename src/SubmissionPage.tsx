@@ -300,7 +300,14 @@ export function SubmissionPage({
               <div className="grid gap-5 md:grid-cols-2">
                 <label className="block text-sm font-bold">
                   Team ID *
-                  <input value={registrationId} onChange={(event) => setRegistrationId(event.target.value)} placeholder="DEV4-..." className="mt-2 w-full border border-orange-300/15 bg-[#111014] px-4 py-3 outline-none transition focus:border-orange-500" />
+                  <input
+                    value={registrationId}
+                    onChange={(event) => setRegistrationId(event.target.value.toUpperCase())}
+                    placeholder={schedule.category === 'University' ? 'DEV-001U' : 'DEV-001S'}
+                    pattern={schedule.category === 'University' ? 'DEV-[0-9]{3}U' : 'DEV-[0-9]{3}S'}
+                    title={`Enter the ${schedule.category.toLowerCase()} Team ID in the format ${schedule.category === 'University' ? 'DEV-001U' : 'DEV-001S'}`}
+                    className="mt-2 w-full border border-orange-300/15 bg-[#111014] px-4 py-3 outline-none transition focus:border-orange-500"
+                  />
                 </label>
                 <label className="block text-sm font-bold">
                   Registered team name *
