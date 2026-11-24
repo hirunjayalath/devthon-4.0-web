@@ -11,9 +11,18 @@ export function HeroSection({ onRegister, onSubmit }: { onRegister: () => void; 
       <div className="relative z-10 mx-auto flex max-w-[90rem] justify-center">
         <div className="code-frame hero-code-frame w-full min-w-0 max-w-5xl text-center" data-code-file="hero.tsx">
           <p className="code-comment mb-4 text-xs font-bold uppercase tracking-[0.15em] text-orange-400 sm:mb-5 sm:tracking-[0.26em]">Web development competition</p>
-          <h1 className="text-[clamp(2rem,8vw,5.7rem)] font-black leading-[0.92] tracking-tight sm:leading-[0.95]">
-            <span className="block sm:whitespace-nowrap">Design your dreams</span>
-            <span className="block text-orange-500 sm:whitespace-nowrap">into reality.</span>
+          <h1
+            className="text-[clamp(1.65rem,6.3vw,4.35rem)] font-black leading-[0.92] tracking-tight sm:leading-[0.95]"
+            aria-label="Design your dreams into reality"
+          >
+            <span className="block sm:whitespace-nowrap">
+              <span className="text-orange-500" aria-hidden="true">&lt;!-- </span>
+              Design your dreams
+            </span>
+            <span className="block sm:whitespace-nowrap">
+              <span className="text-orange-500">into reality</span>
+              <span className="text-orange-500" aria-hidden="true"> --&gt;</span>
+            </span>
           </h1>
           <p className="mx-auto mt-5 max-w-4xl text-base leading-7 text-orange-100/65 sm:mt-7 sm:text-lg sm:leading-8">DEV{'{thon}'} 4.0 is a practical platform for school and university developers to learn, collaborate and build meaningful web solutions.</p>
           <div className="mx-auto mt-7 grid w-full max-w-sm gap-3 sm:mt-9 sm:flex sm:max-w-none sm:flex-wrap sm:justify-center sm:gap-4">
