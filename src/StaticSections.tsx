@@ -189,12 +189,12 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-2xl">
           <p className="code-comment mb-3 text-xs font-bold uppercase tracking-[0.24em] text-orange-400">Contact us</p>
-          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">Organizing Team</h2>
+          <h2 className="text-3xl font-black leading-tight tracking-tight sm:text-4xl lg:text-5xl">Contact Us</h2>
           <p className="mt-4 leading-7 text-orange-100/60">Select a team member to view their contact details.</p>
         </div>
 
-        <div className="mx-auto max-w-4xl">
-          <div className="grid gap-5 sm:grid-cols-2">
+        <div className="mx-auto max-w-6xl">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {contacts.map((contact, index) => (
               <article
                 key={contact.name}
@@ -235,7 +235,7 @@ export function ContactSection({ onRegister }: { onRegister: () => void }) {
 
                 <div className="absolute inset-x-0 bottom-0 bg-[#111014]/95 p-4 sm:p-5 lg:p-6">
                   <p className="text-xs font-bold uppercase tracking-[0.18em] text-orange-400"><span className="text-orange-100/40">role: </span>{contact.position}</p>
-                  <h3 className="mt-2 text-lg font-black sm:text-xl lg:text-2xl">{contact.name}</h3>
+                  <h3 className="mt-2 text-lg font-black sm:text-xl">{contact.name}</h3>
                   <div className={`grid transition-[grid-template-rows,opacity] duration-300 ${activeContact === index ? 'mt-4 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                     <div className="overflow-hidden">
                       <p className="leading-6 text-orange-100/60">{contact.club}</p>

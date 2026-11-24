@@ -8,7 +8,6 @@ import { StageCountdown } from './StageCountdown'
 type TimelineItem = {
   stage: string
   date: string
-  related?: string[]
   submissionKey?: SubmissionKey
   registrationCategory?: Category
 }
@@ -24,14 +23,15 @@ const timelineByCategory: Record<Category, TimelineItem[]> = {
     {
       stage: 'UI/UX Submission',
       date: SUBMISSION_WINDOWS['university-uiux'].timelineLabel,
-      related: ['UI/UX Session · Jan 16'],
       submissionKey: 'university-uiux',
     },
+    { stage: 'UI/UX Session', date: 'Jan 16' },
     {
       stage: 'Semi Finals',
       date: 'Feb 01 – Feb 13',
-      related: ['Full Web Development Session · Feb 06', 'Panel Discussion · Date to be announced'],
     },
+    { stage: 'Full Web Development Session', date: 'Feb 06' },
+    { stage: 'Panel Discussion', date: 'Date to be announced' },
     { stage: 'Grand Finale', date: 'Feb 27' },
   ],
   School: [
@@ -39,19 +39,19 @@ const timelineByCategory: Record<Category, TimelineItem[]> = {
       stage: 'Team Registration',
       date: REGISTRATION_WINDOWS.School.timelineLabel,
       registrationCategory: 'School',
-      related: ['Online Introductory Session · Date to be announced'],
     },
+    { stage: 'Online Introductory Session', date: 'Date to be announced' },
     {
       stage: 'Proposal Submission',
       date: SUBMISSION_WINDOWS['school-proposal'].timelineLabel,
-      related: ['Proposal Creation Workshop · Date to be announced'],
       submissionKey: 'school-proposal',
     },
+    { stage: 'Proposal Creation Workshop', date: 'Date to be announced' },
     {
       stage: 'Semi Finals',
       date: 'Jan 27 – Feb 13',
-      related: ['Full Web Development Session · Jan 30'],
     },
+    { stage: 'Full Web Development Session', date: 'Jan 30' },
     { stage: 'Grand Finale', date: 'Feb 27' },
   ],
 }
@@ -158,9 +158,6 @@ export function EventTimeline({ onSubmit }: { onSubmit: (key: SubmissionKey) => 
                       className="mt-4"
                     />
                   )}
-                  {item.related?.map((detail) => (
-                    <p key={detail} className="mt-4 border border-orange-300/10 px-4 py-3 text-xs leading-5 text-orange-100/55"><span className="text-orange-400">session: </span>{detail}</p>
-                  ))}
                   {item.submissionKey && submissionState && (
                     <div className="mt-5 border-t border-orange-300/10 pt-5">
                       <p className={`text-xs font-black uppercase tracking-[0.15em] ${submissionState.isOpen ? 'text-emerald-400' : 'text-orange-100/40'}`}>
