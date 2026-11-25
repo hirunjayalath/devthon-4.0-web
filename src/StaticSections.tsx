@@ -287,7 +287,7 @@ export function Footer() {
             <a href="#home" className="brand-wordmark text-3xl font-black tracking-tight text-white">
               DEV<span className="text-orange-500">{'{thon}'} 4.0</span>
             </a>
-            <p className="mt-3">
+            <p className="mt-3" style={{ fontVariantLigatures: 'none', fontFeatureSettings: '"liga" 0, "calt" 0' }}>
               <span className="text-orange-500" aria-hidden="true">&lt;!-- </span>
               Design your dreams into reality.
               <span className="text-orange-500" aria-hidden="true"> --&gt;</span>
